@@ -11,9 +11,10 @@
       text-align: center;
       padding: 2rem;
     }
-    img {
-      max-width: 300px;
-      margin: 1rem;
+    img, .gif {
+      max-width: 320px;
+      margin: 1rem auto;
+      border-radius: 12px;
     }
     .button {
       background-color: #ffaa00;
@@ -25,6 +26,20 @@
       border-radius: 8px;
       margin-top: 1rem;
       cursor: pointer;
+      text-decoration: none;
+    }
+    .meme-text {
+      font-size: 1.1rem;
+      color: #ffd700;
+      margin: 1rem auto;
+    }
+    .links {
+      margin-top: 2rem;
+      font-size: 1rem;
+    }
+    .links a {
+      color: #ffa500;
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -32,10 +47,33 @@
   <h1>$WAGMICE 🧀</h1>
   <h2>The Cheesiest Token on Solana</h2>
   <img src="wagmice-logo.png" alt="WAGMICE logo" />
-  <p>Created by rats. Pumped by degenerates. No roadmap. Just cheese.</p>
-  <p>🧀 1 Billion Total Supply<br>🚀 Launched on Pump.fun<br>🐭 Early rats eat first</p>
-  <a href="https://pump.fun/launch/WAGMICE" target="_blank">
-    <button class="button">Buy Now on Pump.fun</button>
+  <div class="meme-text">
+    "In Cheese We Trust. In Rugs We Bust."  
+  </div>
+
+  <!-- Looping WAGMICE GIF -->
+  <img class="gif" src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Cheese GIF" />
+
+  <p>
+    Created by rats. Pumped by degenerates.<br>
+    No roadmap. No promises. Just cheese. 🧀
+  </p>
+  <p>
+    🚀 Launched on Pump.fun<br>
+    💯 Fair Launch<br>
+    🧀 1 Billion Total Supply<br>
+    🐭 Early Rats Eat First
+  </p>
+
+  <!-- Meme-style Call to Action -->
+  <img class="gif" src="https://media.giphy.com/media/KzJkzjggfGN5Py6nkT/giphy.gif" alt="Meme Ad" />
+
+  <a class="button" href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">
+    🧀 Buy $WGM on Pump.fun
   </a>
+
+  <div class="links">
+    <p>Follow the cheese trail on <a href="https://x.com/prithviraj987" target="_blank">X (Twitter)</a></p>
+  </div>
 </body>
 </html>
