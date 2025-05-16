@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cheese Clicker - Earn $WGM</title>
+  <style>
+    body {
+      background-color: #1a1a1a;
+      color: #fff;
+      font-family: 'Comic Sans MS', cursive;
+      text-align: center;
+      padding: 2rem;
+    }
+    h1 {
+      color: #ffcc00;
+    }
+    #cheese {
+      width: 150px;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+    #cheese:active {
+      transform: scale(0.95);
+    }
+    #score {
+      font-size: 2rem;
+      margin-top: 1rem;
+    }
+    #submit {
+      margin-top: 2rem;
+      display: none;
+    }
+    .button {
+      background-color: #ffaa00;
+      color: #000;
+      padding: 1rem 2rem;
+      border: none;
+      font-weight: bold;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧀 Cheese Clicker</h1>
+  <p>Click the cheese! Earn $WGM if you reach 50!</p>
+  <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" id="cheese" alt="Cheese">
+  <div id="score">Score: 0</div>
+
+  <div id="submit">
+    <p>Congrats! You reached 50 cheese! 🎉</p>
+    <a class="button" href="https://forms.gle/your-google-form-link" target="_blank">Submit Wallet for WGM</a>
+  </div>
+
+  <script>
+    let score = 0;
+    const cheese = document.getElementById('cheese');
+    const scoreBoard = document.getElementById('score');
+    const submitDiv = document.getElementById('submit');
+
+    cheese.addEventListener('click', () => {
+      score++;
+      scoreBoard.textContent = 'Score: ' + score;
+
+      if (score === 50) {
+        submitDiv.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
