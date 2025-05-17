@@ -39,6 +39,13 @@
       font-size: 1rem;
       border-radius: 8px;
       cursor: pointer;
+      margin-top: 1rem;
+    }
+    #muteBtn {
+      margin-top: 2rem;
+      background-color: #444;
+      color: #fff;
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -52,25 +59,19 @@
 
   <div id="submit">
     <p>Congrats! You reached 50 cheese! 🎉</p>
-    <a class="button" href="https://forms.gle/VH7XZ5C19JmBhGVm6" target="_blank">
+    <a class="button" href="https://forms.gle/Yxz5V9GAwzYaTZiPA" target="_blank">
       Submit Your Solana Wallet for $WGM
     </a>
   </div>
 
+  <!-- 🎵 Audio Elements -->
+  <audio id="chomp" src="cheese-chomp.mp3" preload="auto"></audio>
+  <audio id="win" src="win.mp3" preload="auto"></audio>
+  <audio id="bg" src="background-music.mp3" preload="auto" loop></audio>
+
+  <!-- 🔇 Mute Button -->
+  <button class="button" id="muteBtn">🔊 Mute Music</button>
+
   <script>
     let score = 0;
-    const cheese = document.getElementById('cheese');
-    const scoreBoard = document.getElementById('score');
-    const submitDiv = document.getElementById('submit');
-
-    cheese.addEventListener('click', () => {
-      score++;
-      scoreBoard.textContent = 'Score: ' + score;
-
-      if (score === 50) {
-        submitDiv.style.display = 'block';
-      }
-    });
-  </script>
-</body>
-</html>
+    const cheese = document.getElementById('ch
