@@ -74,4 +74,36 @@
 
   <script>
     let score = 0;
-    const cheese = document.getElementById('ch
+    const cheese = document.getElementById('cheese');
+    const scoreBoard = document.getElementById('score');
+    const submitDiv = document.getElementById('submit');
+    const chompSound = document.getElementById('chomp');
+    const winSound = document.getElementById('win');
+    const bgMusic = document.getElementById('bg');
+    const muteBtn = document.getElementById('muteBtn');
+
+    // Start background music on load
+    window.addEventListener('load', () => {
+      bgMusic.volume = 0.2;
+      bgMusic.play().catch(() => {}); // prevents autoplay errors
+    });
+
+    cheese.addEventListener('click', () => {
+      score++;
+      scoreBoard.textContent = 'Score: ' + score;
+      chompSound.currentTime = 0;
+      chompSound.play();
+
+      if (score === 50) {
+        winSound.play();
+        submitDiv.style.display = 'block';
+      }
+    });
+
+    muteBtn.addEventListener('click', () => {
+      bgMusic.muted = !bgMusic.muted;
+      muteBtn.textContent = bgMusic.muted ? '🔇 Unmute Music' : '🔊 Mute Music';
+    });
+  </script>
+</body>
+</html>
