@@ -2,28 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>$WAGMICE — Solana Meme Token | 1B Supply | Pump.fun</title>
-  <meta name="description" content="$WAGMICE (WGM) is a viral Solana meme token with a 1 billion supply launched on Pump.fun. Join the cheese cult. No roadmap. Just vibes.">
-  <meta name="keywords" content="Solana meme token, pump.fun, WAGMICE, crypto meme coin, WGM, Solana token, funny crypto, cheese coin">
-  <meta name="author" content="WAGMICE Community">
-  <meta property="og:title" content="$WAGMICE — The Cheesiest Token on Solana">
-  <meta property="og:description" content="Meme token. 1 billion supply. Fair launch. Powered by rats, pumped by degenerates.">
-  <meta property="og:image" content="https://yourdomain.com/wagmice-logo.png">
-  <meta property="og:url" content="https://yourusername.github.io/wagmice-token-site/">
-  <meta name="twitter:card" content="summary_large_image">
-
+  <title>Cheese Clicker - Earn $WGM</title>
   <style>
     body {
       background-color: #1a1a1a;
       color: #fff;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-family: 'Comic Sans MS', cursive;
       text-align: center;
       padding: 2rem;
     }
-    img, .gif {
-      max-width: 320px;
-      margin: 1rem auto;
-      border-radius: 12px;
+    h1 {
+      color: #ffcc00;
+    }
+    #cheese {
+      width: 150px;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+    #cheese:active {
+      transform: scale(0.95);
+    }
+    #score {
+      font-size: 2rem;
+      margin-top: 1rem;
+    }
+    #submit {
+      margin-top: 2rem;
+      display: none;
     }
     .button {
       background-color: #ffaa00;
@@ -31,64 +36,39 @@
       padding: 1rem 2rem;
       border: none;
       font-weight: bold;
-      font-size: 1.2rem;
-      border-radius: 8px;
-      margin: 1rem auto;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .meme-text {
-      font-size: 1.1rem;
-      color: #ffd700;
-      margin: 1rem auto;
-    }
-    .links {
-      margin-top: 2rem;
       font-size: 1rem;
-    }
-    .links a {
-      color: #ffa500;
-      text-decoration: underline;
+      border-radius: 8px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
+  <h1>🧀 Cheese Clicker</h1>
+  <p>Click the cheese below! Earn $WGM if you reach 50!</p>
+  <div>
+    <img src="wagmice-logo.png" id="cheese" alt="Cheese">
+  </div>
+  <div id="score">Score: 0</div>
 
-  <!-- BUY BUTTON AT THE TOP -->
-  <a class="button" href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">
-    🧀 Buy $WGM on Pump.fun
-  </a>
-
-  <h1>$WAGMICE 🧀</h1>
-  <h2>Solana’s Cheesiest Meme Token</h2>
-  <img src="wagmice-logo.png" alt="WAGMICE logo" />
-  <div class="meme-text">
-    "In Cheese We Trust. In Rugs We Bust."
+  <div id="submit">
+    <p>Congrats! You reached 50 cheese! 🎉</p>
+    <a class="button" href="https://forms.gle/Yxz5V9GAwzYaTZiPA" target="_blank">Submit Wallet for WGM</a>
   </div>
 
-  <!-- Meme GIFs   
-  <img class="gif" src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Cheese GIF" />
-  <img class="gif" src="https://media.giphy.com/media/KzJkzjggfGN5Py6nkT/giphy.gif" alt="Meme Ad" />
-  -->
-  <p>
-    $WAGMICE is a fair-launched meme coin on <strong>Pump.fun</strong><br>
-    🧀 1 Billion Supply — No VC — No Presale<br>
-    🐭 Powered by rats. Pumped by degenerates.
-  </p>
+  <script>
+    let score = 0;
+    const cheese = document.getElementById('cheese');
+    const scoreBoard = document.getElementById('score');
+    const submitDiv = document.getElementById('submit');
 
-  <!-- Cheese Clicker Iframe Inserted Here -->
-  <iframe src="cheese-clicker.html" width="100%" height="500" style="border:none;"></iframe>
+    cheese.addEventListener('click', () => {
+      score++;
+      scoreBoard.textContent = 'Score: ' + score;
 
-  <!-- Duplicate CTA at Bottom -->
-  <a class="button" href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">
-    Buy Now on Pump.fun 🚀
-  </a>
-
-  <div class="links">
-    <p>Follow us on <a href="https://x.com/prithviraj987" target="_blank">X (Twitter)</a></p>
-    <p>View on <a href="https://solscan.io/token/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4" target="_blank">Solscan</a></p>
-  </div>
-
+      if (score === 50) {
+        submitDiv.style.display = 'block';
+      }
+    });
+  </script>
 </body>
 </html>
