@@ -151,6 +151,7 @@
     </div>
 
     <script>
+        const chompSound = new Audio('chomp.mp3');
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const scoreBoard = document.getElementById('scoreBoard');
@@ -327,6 +328,8 @@
                 ) {
                     cheeses.splice(i, 1); // Remove caught cheese
                     score += 10;
+                    chompSound.currentTime = 0;
+                    chompSound.play();
                     updateScoreboard();
                     // Add a little "catch" animation or sound effect here if desired
                 }
