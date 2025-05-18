@@ -435,14 +435,7 @@
         function updateScoreboard() {
             scoreBoard.textContent = `Score: ${score}`;
         }
-        function showLevelCompleteScreen() {
-            messageTitle.textContent = 'Level 1 Complete!';
-            messageText.innerHTML = `🎉 You caught 10 cheese!<br><br>
-            To unlock Level 2, <a href="YOUR_TOKEN_LINK_HERE" target="_blank" style="color:#2563eb;text-decoration:underline;">buy a token here</a>.<br><br>
-            After buying, reload the page to play Level 2.`;
-            startButton.style.display = 'none';
-            messageBox.style.display = 'flex';
-        }    
+
         function updateMissedCounter() {
             missedCounterDisplay.textContent = `Missed: ${missed} / ${maxMissed}`;
         }
@@ -457,14 +450,16 @@
                 }
             }
         }
+
+        // Only one definition of showLevelCompleteScreen - fixed!
         function showLevelCompleteScreen() {
             messageTitle.textContent = 'Level 1 Complete!';
             messageText.innerHTML = `🎉 You caught 10 cheese!<br><br>
             To unlock Level 2, <a href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank" style="color:#2563eb;text-decoration:underline;">buy WAGMICE TOKEN here</a>.<br><br>
             After buying, reload the page to play Level 2.`;
-        startButton.style.display = 'none';
-        messageBox.style.display = 'flex';
-}
+            startButton.style.display = 'none';
+            messageBox.style.display = 'flex';
+        }
 
         function showGameOverScreen() {
             messageTitle.textContent = 'Game Over!';
@@ -476,7 +471,12 @@
 
         function gameLoop(timestamp) {
             if (gameOver) {
-                showGameOverScreen();
+                // Determine which screen to show
+                if (score >= 100 && level === 1) {
+                    showLevelCompleteScreen();
+                } else {
+                    showGameOverScreen();
+                }
                 return;
             }
 
