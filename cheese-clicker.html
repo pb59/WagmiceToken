@@ -14,30 +14,27 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background-color: #60a5fa; /* Light blue sky */
-            font-family: 'Press+Start+2P', cursive;
-            color: #4b5563; /* Dark gray for text */
+            background-color: #60a5fa;
+            font-family: 'Press Start 2P', cursive;
+            color: #4b5563;
             overflow: hidden;
-            touch-action: none; /* Disable browser touch gestures */
+            touch-action: none;
         }
-
         #gameContainer {
-            border: 5px solid #ca8a04; /* Cheese-yellow border */
+            border: 5px solid #ca8a04;
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             position: relative;
-            background-color: #bfdbfe; /* Lighter blue for game area */
+            background-color: #bfdbfe;
             max-width: 100vw;
             max-height: 98vh;
         }
-
         canvas {
             display: block;
             border-radius: 10px;
             max-width: 100%;
             height: auto;
         }
-
         #uiContainer {
             margin-top: 20px;
             display: flex;
@@ -46,30 +43,27 @@
             gap: 15px;
             width: 100%;
         }
-
         #scoreBoard {
             font-size: 2em;
-            color: #f59e0b; /* Amber/Cheese color */
-            text-shadow: 2px 2px #854d0e; /* Darker shadow */
+            color: #f59e0b;
+            text-shadow: 2px 2px #854d0e;
         }
-
         #missedCounter {
             font-size: 1em;
-            color: #ef4444; /* Red for missed items */
+            color: #ef4444;
         }
-
         #messageBox {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(250, 250, 240, 0.95); /* Creamy white */
-            color: #78350f; /* Brown text */
+            background-color: rgba(250, 250, 240, 0.95);
+            color: #78350f;
             padding: 30px;
             border-radius: 20px;
             text-align: center;
             z-index: 10;
-            border: 3px solid #facc15; /* Bright yellow border */
+            border: 3px solid #facc15;
             box-shadow: 0 0 25px rgba(250, 204, 21, 0.7);
             display: flex;
             flex-direction: column;
@@ -77,22 +71,19 @@
             width: 80%;
             max-width: 450px;
         }
-
         #messageBox h2 {
             margin-top: 0;
             font-size: 2em;
-            color: #d97706; /* Darker yellow/orange */
+            color: #d97706;
         }
-
         #messageBox p {
             font-size: 1.1em;
             margin-bottom: 25px;
         }
-
         .gameButton {
-            background: linear-gradient(145deg, #f59e0b, #fbbf24); /* Yellow gradient */
-            color: #78350f; /* Brown text */
-            border: 2px solid #b45309; /* Dark orange border */
+            background: linear-gradient(145deg, #f59e0b, #fbbf24);
+            color: #78350f;
+            border: 2px solid #b45309;
             padding: 15px 30px;
             font-family: 'Press Start 2P', cursive;
             font-size: 1.1em;
@@ -102,38 +93,26 @@
             transition: all 0.1s ease;
             text-transform: uppercase;
         }
-
         .gameButton:hover {
             background: linear-gradient(145deg, #fbbf24, #f59e0b);
             box-shadow: 0 7px #854d0e;
             transform: translateY(-2px);
         }
-
         .gameButton:active {
             box-shadow: 0 3px #854d0e;
             transform: translateY(0px);
         }
-
-        /* Mouse and Cheese Styles (using emoji for simplicity) */
-        .emoji-char {
-            font-size: 24px; /* Base size, will be scaled in JS */
-            display: inline-block;
-        }
-
-
         @media (max-width: 600px) {
             #scoreBoard { font-size: 1.5em; }
             #missedCounter { font-size: 0.9em; }
             #messageBox h2 { font-size: 1.6em; }
             #messageBox p { font-size: 1em; }
             .gameButton { padding: 12px 24px; font-size: 1em; }
-            .emoji-char { font-size: 20px; }
         }
-         @media (max-height: 500px) {
+        @media (max-height: 500px) {
             #uiContainer { margin-top: 10px; }
             #scoreBoard { font-size: 1.2em; }
         }
-
     </style>
 </head>
 <body>
@@ -149,8 +128,115 @@
         <div id="scoreBoard">Score: 0</div>
         <div id="missedCounter">Missed: 0 / 5</div>
     </div>
-
     <script>
+        // --- Image Assets ---
+        const mouseImg = new Image();
+        mouseImg.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f401.png';
+        const cheeseImg = new Image();
+        cheeseImg.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9c0.png';
+
+        // --- Background Image Assets ---
+        const bgCloudImg = new Image();
+        bgCloudImg.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/2601.png';
+        const bgBirdImg = new Image();
+        bgBirdImg.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f426.png';
+        const bgCheeseImg = new Image();
+        bgCheeseImg.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9c0.png';
+
+        // --- Background Animation State ---
+        let bgClouds = [];
+        let bgBirds = [];
+        let bgCheeses = [];
+        function initBackground(canvas) {
+            // Clouds
+            bgClouds = [];
+            for (let i = 0; i < 5; i++) {
+                bgClouds.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height * 0.3,
+                    speed: 0.2 + Math.random() * 0.3,
+                    size: 60 + Math.random() * 50
+                });
+            }
+            // Birds
+            bgBirds = [];
+            for (let i = 0; i < 3; i++) {
+                bgBirds.push({
+                    x: Math.random() * canvas.width,
+                    y: 40 + Math.random() * 80,
+                    speed: 0.6 + Math.random() * 0.5,
+                    size: 40 + Math.random() * 20,
+                    flip: Math.random() < 0.5 ? 1 : -1
+                });
+            }
+            // Cheeses
+            bgCheeses = [];
+            for (let i = 0; i < 6; i++) {
+                bgCheeses.push({
+                    x: Math.random() * canvas.width,
+                    y: -Math.random() * 300,
+                    speed: 0.7 + Math.random() * 0.7,
+                    size: 32 + Math.random() * 24
+                });
+            }
+        }
+
+        function drawBackground(ctx, canvas) {
+            // Gradient sky
+            const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            bgGradient.addColorStop(0, "#bfe0ff");
+            bgGradient.addColorStop(0.8, "#e9f3ff");
+            bgGradient.addColorStop(1, "#e5e7b7");
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw clouds
+            bgClouds.forEach(cloud => {
+                ctx.globalAlpha = 0.8;
+                if (bgCloudImg.complete && bgCloudImg.naturalWidth) {
+                    ctx.drawImage(bgCloudImg, cloud.x, cloud.y, cloud.size, cloud.size);
+                }
+                ctx.globalAlpha = 1.0;
+                cloud.x += cloud.speed;
+                if (cloud.x > canvas.width) cloud.x = -cloud.size;
+            });
+
+            // Draw birds
+            bgBirds.forEach(bird => {
+                ctx.save();
+                ctx.globalAlpha = 0.95;
+                if (bgBirdImg.complete && bgBirdImg.naturalWidth) {
+                    if (bird.flip === -1) {
+                        ctx.translate(bird.x + bird.size, bird.y);
+                        ctx.scale(-1, 1);
+                        ctx.drawImage(bgBirdImg, 0, 0, bird.size, bird.size);
+                    } else {
+                        ctx.drawImage(bgBirdImg, bird.x, bird.y, bird.size, bird.size);
+                    }
+                }
+                ctx.restore();
+                ctx.globalAlpha = 1.0;
+                bird.x += bird.speed * bird.flip;
+                if (bird.flip === 1 && bird.x > canvas.width) bird.x = -bird.size;
+                if (bird.flip === -1 && bird.x < -bird.size) bird.x = canvas.width;
+            });
+
+            // Draw falling cheeses (background only)
+            bgCheeses.forEach(chs => {
+                if (bgCheeseImg.complete && bgCheeseImg.naturalWidth) {
+                    ctx.globalAlpha = 0.5;
+                    ctx.drawImage(bgCheeseImg, chs.x, chs.y, chs.size, chs.size);
+                    ctx.globalAlpha = 1.0;
+                }
+                chs.y += chs.speed;
+                if (chs.y > canvas.height) {
+                    chs.y = -chs.size;
+                    chs.x = Math.random() * canvas.width;
+                }
+            });
+        }
+
+        // --- Game Logic ---
         const chompSound = new Audio('chomp.mp3');
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -169,13 +255,13 @@
         let missed = 0;
         const maxMissed = 5;
         let cheeseFallSpeed = 2;
-        let cheeseSpawnInterval = 1500; // ms
+        let cheeseSpawnInterval = 1500;
         let lastCheeseSpawnTime = 0;
         let gameOver = true;
         let animationFrameId;
         let lastTime = 0;
         let difficultyTimer = 0;
-        const difficultyInterval = 15000; // Increase difficulty every 15s
+        const difficultyInterval = 15000;
 
         // Object properties - these will be scaled
         const playerBaseWidth = 50;
@@ -184,12 +270,12 @@
 
         let playerWidth = playerBaseWidth;
         let playerHeight = playerBaseHeight;
-        let cheeseSize = cheeseBaseSize; // Used as width and height for cheese emoji
+        let cheeseSize = cheeseBaseSize;
 
         // Mouse/Touch position
         let targetPlayerX = canvas.width / 2;
 
-        // Emojis
+        // Emojis (fallback)
         const MOUSE_EMOJI = '🐭';
         const CHEESE_EMOJI = '🧀';
 
@@ -202,20 +288,19 @@
                 this.height = height;
                 this.emoji = emoji;
             }
-
             draw() {
-                ctx.font = `${this.height * 0.8}px Arial`; // Adjust emoji size slightly smaller than height
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(this.emoji, this.x + this.width / 2, this.y + this.height / 2);
+                if (mouseImg.complete && mouseImg.naturalWidth) {
+                    ctx.drawImage(mouseImg, this.x, this.y, this.width, this.height);
+                } else {
+                    ctx.font = `${this.height * 0.8}px Arial`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(this.emoji, this.x + this.width / 2, this.y + this.height / 2);
+                }
             }
-
             update() {
-                // Smoothly move player towards targetPlayerX (set by mouse/touch)
                 const easing = 0.3;
                 this.x += (targetPlayerX - (this.x + this.width / 2)) * easing;
-
-
                 // Keep player within canvas bounds
                 if (this.x < 0) this.x = 0;
                 if (this.x + this.width > canvas.width) this.x = canvas.width - this.width;
@@ -227,18 +312,20 @@
             constructor(x, y, size, emoji, speed) {
                 this.x = x;
                 this.y = y;
-                this.size = size; // Emoji will be roughly this square size
+                this.size = size;
                 this.emoji = emoji;
                 this.speed = speed;
             }
-
             draw() {
-                ctx.font = `${this.size * 0.8}px Arial`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(this.emoji, this.x + this.size / 2, this.y + this.size / 2);
+                if (cheeseImg.complete && cheeseImg.naturalWidth) {
+                    ctx.drawImage(cheeseImg, this.x, this.y, this.size, this.size);
+                } else {
+                    ctx.font = `${this.size * 0.8}px Arial`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(this.emoji, this.x + this.size / 2, this.y + this.size / 2);
+                }
             }
-
             update() {
                 this.y += this.speed;
             }
@@ -247,55 +334,50 @@
         // --- Game Functions ---
         function setCanvasAndElementSizes() {
             const containerRect = gameContainer.getBoundingClientRect();
-            let newWidth = containerRect.width - 10; // Account for border
+            let newWidth = containerRect.width - 10;
             let newHeight = window.innerHeight * 0.6;
-
-            newHeight = Math.min(newHeight, newWidth * 0.8); // Aspect ratio cap
-            newWidth = Math.min(newWidth, 900);
-            newHeight = Math.min(newHeight, 750);
-
+            newHeight = Math.min(newHeight, newWidth * 0.8);
+            newWidth = Math.min(newWidth, 1200); // Increased max width
+            newHeight = Math.min(newHeight, 900); // Increased max height
             canvas.width = newWidth;
             canvas.height = newHeight;
-
             // Scale game elements based on canvas size
             const scaleFactor = Math.min(canvas.width / 600, canvas.height / 400);
             playerWidth = playerBaseWidth * scaleFactor;
             playerHeight = playerBaseHeight * scaleFactor;
             cheeseSize = cheeseBaseSize * scaleFactor;
-
-            // Update player position if it exists (e.g., on resize during game)
+            // Update player position if it exists
             if (player) {
-                player.y = canvas.height - player.height - 10; // Keep at bottom
+                player.y = canvas.height - player.height - 10;
                 player.width = playerWidth;
                 player.height = playerHeight;
             }
             if (gameOver) {
                 targetPlayerX = canvas.width / 2;
             }
+            // Re-initialize background for new canvas size
+            initBackground(canvas);
         }
 
         function initGame() {
             setCanvasAndElementSizes();
-
             player = new Player(
                 canvas.width / 2 - playerWidth / 2,
-                canvas.height - playerHeight - 10, // Position at bottom
+                canvas.height - playerHeight - 10,
                 playerWidth,
                 playerHeight,
                 MOUSE_EMOJI
             );
-            targetPlayerX = canvas.width / 2; // Center the target initially
-
+            targetPlayerX = canvas.width / 2;
             cheeses = [];
             score = 0;
             missed = 0;
-            cheeseFallSpeed = 2 * (canvas.height / 400); // Scale speed slightly with canvas size
+            cheeseFallSpeed = 2 * (canvas.height / 400);
             cheeseSpawnInterval = 1500;
             lastCheeseSpawnTime = performance.now();
             difficultyTimer = 0;
             gameOver = false;
             lastTime = performance.now();
-
             updateScoreboard();
             updateMissedCounter();
             messageBox.style.display = 'none';
@@ -308,7 +390,7 @@
             if (currentTime - lastCheeseSpawnTime > cheeseSpawnInterval) {
                 lastCheeseSpawnTime = currentTime;
                 const x = Math.random() * (canvas.width - cheeseSize);
-                const y = -cheeseSize; // Start just above the screen
+                const y = -cheeseSize;
                 cheeses.push(new Cheese(x, y, cheeseSize, CHEESE_EMOJI, cheeseFallSpeed));
             }
         }
@@ -318,7 +400,6 @@
                 const cheese = cheeses[i];
                 cheese.update();
                 cheese.draw();
-
                 // Check for collision with player
                 if (
                     cheese.x < player.x + player.width &&
@@ -326,16 +407,15 @@
                     cheese.y < player.y + player.height &&
                     cheese.y + cheese.size > player.y
                 ) {
-                    cheeses.splice(i, 1); // Remove caught cheese
+                    cheeses.splice(i, 1);
                     score += 10;
                     chompSound.currentTime = 0;
                     chompSound.play();
                     updateScoreboard();
-                    // Add a little "catch" animation or sound effect here if desired
                 }
-                // Check if cheese is missed (goes below screen)
+                // Check if cheese is missed
                 else if (cheese.y > canvas.height) {
-                    cheeses.splice(i, 1); // Remove missed cheese
+                    cheeses.splice(i, 1);
                     missed++;
                     updateMissedCounter();
                     if (missed >= maxMissed) {
@@ -352,7 +432,6 @@
             missedCounterDisplay.textContent = `Missed: ${missed} / ${maxMissed}`;
         }
 
-
         function increaseDifficulty(deltaTime) {
             difficultyTimer += deltaTime;
             if (difficultyTimer >= difficultyInterval) {
@@ -361,7 +440,6 @@
                 if (cheeseSpawnInterval > 600) {
                     cheeseSpawnInterval -= 100;
                 }
-                // console.log(`Difficulty: Speed ${cheeseFallSpeed.toFixed(1)}, Interval ${cheeseSpawnInterval}`);
             }
         }
 
@@ -378,10 +456,9 @@
                 return;
             }
 
-            const deltaTime = timestamp - lastTime;
-            lastTime = timestamp;
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+            // Draw animated background
+            drawBackground(ctx, canvas);
+            // The background fills the canvas, so no need for ctx.clearRect here
 
             // Update and Draw Player
             player.update();
@@ -389,9 +466,11 @@
 
             // Spawn, Update, and Draw Cheeses
             spawnCheese();
-            updateAndDrawCheeses(); // Also handles collisions and misses
+            updateAndDrawCheeses();
 
-            // Update score (already handled in collision) and difficulty
+            // Update difficulty
+            const deltaTime = timestamp - lastTime;
+            lastTime = timestamp;
             increaseDifficulty(deltaTime);
 
             animationFrameId = requestAnimationFrame(gameLoop);
@@ -408,11 +487,10 @@
             e.preventDefault();
             if (e.touches.length > 0) handleInput(e.touches[0].clientX);
         }, { passive: false });
-         canvas.addEventListener('touchstart', (e) => {
+        canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (e.touches.length > 0) handleInput(e.touches[0].clientX);
         }, { passive: false });
-
 
         startButton.addEventListener('click', () => {
             if (gameOver) initGame();
@@ -422,17 +500,14 @@
             setCanvasAndElementSizes();
             if (player && !gameOver) {
                 player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-                 targetPlayerX = player.x + player.width / 2; // Re-center target if player moved
-            } else if (gameOver) {
-                // Message box will cover, but good to ensure canvas is redrawn if needed
-                // For this game, just resizing is enough for the start/end screen.
+                targetPlayerX = player.x + player.width / 2;
             }
         });
 
         // Initial Setup
         window.onload = () => {
             setCanvasAndElementSizes();
-            targetPlayerX = canvas.width / 2; // Initialize target for player
+            targetPlayerX = canvas.width / 2;
             messageBox.style.display = 'flex';
         };
     </script>
