@@ -4,11 +4,10 @@
   <meta charset="UTF-8">
   <title>$WAGMICE — Solana Meme Token | 1B Supply | Pump.fun</title>
   <meta property="og:title" content="$WGM — WAGMICE: Solana's Cheesiest Token">
-<meta property="og:description" content="No roadmap. No VCs. Just cheese. Play the game, buy the token, meme your way to the moon.">
-<meta property="og:image" content="https://pb59.github.io/WagmiceToken/wagmice-logo.png">
-<meta property="og:url" content="https://pb59.github.io/WagmiceToken/">
-<meta name="twitter:card" content="summary_large_image">
-
+  <meta property="og:description" content="No roadmap. No VCs. Just cheese. Play the game, buy the token, meme your way to the moon.">
+  <meta property="og:image" content="https://pb59.github.io/WagmiceToken/wagmice-logo.png">
+  <meta property="og:url" content="https://pb59.github.io/WagmiceToken/">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="description" content="$WAGMICE (WGM) is a viral Solana meme token with a 1 billion supply launched on Pump.fun. Join the cheese cult. No roadmap. Just vibes.">
   <meta name="keywords" content="Solana meme token, pump.fun, WAGMICE, crypto meme coin, WGM, Solana token, funny crypto, cheese coin">
   <meta name="author" content="WAGMICE Community">
@@ -25,6 +24,7 @@
       font-family: 'Comic Sans MS', cursive, sans-serif;
       text-align: center;
       padding: 2rem;
+      margin: 0;
     }
     img, .gif {
       max-width: 320px;
@@ -57,6 +57,123 @@
       color: #ffa500;
       text-decoration: underline;
     }
+    /* Main layout for left-side game section */
+    .main-layout {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .left-section {
+      min-width: 250px;
+      max-width: 290px;
+      background: #222;
+      padding: 1.5rem 1rem 2rem 1rem;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px #0003;
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+    .main-content {
+      flex: 1;
+      min-width: 0;
+    }
+    /* Responsive for mobile */
+    @media (max-width: 900px) {
+      .main-layout {
+        flex-direction: column;
+        gap: 0;
+      }
+      .left-section {
+        max-width: 100%;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      .main-content {
+        text-align: center;
+      }
+    }
+
+    /* Flashy Cheese Clicker button */
+    .flashy-cheese-btn {
+      background: linear-gradient(90deg,#fff700 0%, #ff8800 100%);
+      color: #1a1a1a;
+      font-weight: bold;
+      font-size: 1.4rem;
+      padding: 1.3rem 2.5rem;
+      border: none;
+      border-radius: 50px;
+      box-shadow: 0 0 24px 8px #ffea00, 0 2px 16px #ff8800 inset;
+      cursor: pointer;
+      outline: none;
+      transition: transform 0.18s, box-shadow 0.18s;
+      animation: cheese-glow 1.2s infinite alternate, cheese-bounce 1s infinite alternate;
+      position: relative;
+      z-index: 2;
+      margin: 2rem auto 0 auto;
+      display: block;
+    }
+    @keyframes cheese-glow {
+      0% { box-shadow: 0 0 16px 6px #ffea00, 0 2px 10px #ff8800 inset; }
+      100% { box-shadow: 0 0 32px 16px #ffea00, 0 2px 24px #ff8800 inset; }
+    }
+    @keyframes cheese-bounce {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-5px) scale(1.07); }
+    }
+
+    /* Award Advertisement */
+    .award-ad {
+      background: linear-gradient(135deg, #ffd700 60%, #ff8800 100%);
+      border-radius: 18px;
+      padding: 2rem 1.2rem 1.2rem 1.2rem;
+      margin: 0 auto 1.5rem auto;
+      max-width: 370px;
+      box-shadow: 0 4px 24px #0005, 0 1.5px 0 #fff inset;
+      text-align: center;
+      border: 3px solid #fff700;
+      color: #1a1a1a;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+    .award-ad .trophy {
+      font-size: 2.6rem;
+      display: block;
+      margin-bottom: 0.7rem;
+      animation: trophy-pop 1.6s infinite alternate;
+    }
+    @keyframes trophy-pop {
+      0% { transform: scale(1) rotate(-5deg);}
+      100% { transform: scale(1.15) rotate(8deg);}
+    }
+    .award-ad .title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1.5px;
+    }
+    .award-ad .desc {
+      font-size: 1.08rem;
+      margin-bottom: 0.5rem;
+    }
+    .award-ad .highlight {
+      color: #fff;
+      background: #ff8800;
+      padding: 0.25em 0.7em;
+      border-radius: 10px;
+      font-weight: bold;
+      margin-top: 0.5rem;
+      display: inline-block;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+    }
+    @media (max-width: 700px) {
+      .award-ad { max-width: 98vw; }
+      .main-layout { padding: 0; }
+    }
   </style>
 </head>
 <body>
@@ -66,41 +183,51 @@
     🧀 Buy $WGM on Pump.fun
   </a>
 
-  <h1>$WAGMICE 🧀</h1>
-  <h2>Solana’s Cheesiest Meme Token</h2>
-  <img src="wagmice-logo.png" alt="WAGMICE logo" />
-  <div class="meme-text">
-    "In Cheese We Trust. In Rugs We Bust."
+  <div class="main-layout">
+    <!-- Left Side: Game/Ad Section -->
+    <aside class="left-section">
+      <!-- Award Advertisement Section -->
+      <div class="award-ad">
+        <span class="trophy">🏆</span>
+        <div class="title">WGM Crypto Award</div>
+        <div class="desc">Congratulations! <strong>$WAGMICE</strong> is recognized as the <span class="highlight">Cheesiest Crypto of the Year</span>.<br>
+        Play, Meme, and Win Big!</div>
+      </div>
+      <!-- Game Section -->
+      <h2 style="text-align:center;">Game</h2>
+      <button class="flashy-cheese-btn" onclick="window.open('cheese-clicker.html', '_blank')">
+        🧀 Play Cheese Clicker!
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <section class="main-content">
+      <h1>$WAGMICE 🧀</h1>
+      <h2>Solana’s Cheesiest Meme Token</h2>
+      <img src="wagmice-logo.png" alt="WAGMICE logo" />
+      <div class="meme-text">
+        "In Cheese We Trust. In Rugs We Bust."
+      </div>
+      <!-- 
+      <img class="gif" src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Cheese GIF" />
+      <img class="gif" src="https://media.giphy.com/media/KzJkzjggfGN5Py6nkT/giphy.gif" alt="Meme Ad" />
+      -->
+      <p>
+        $WAGMICE is a fair-launched meme coin on <strong>Pump.fun</strong><br>
+        🧀 1 Billion Supply — No VC — No Presale<br>
+        🐭 Powered by rats. Pumped by degenerates.
+      </p>
+
+      <!-- Duplicate CTA at Bottom -->
+      <a class="button" href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">
+        Buy Now on Pump.fun 🚀
+      </a>
+
+      <div class="links">
+        <p>Follow us on <a href="https://x.com/prithviraj987" target="_blank">X (Twitter)</a></p>
+        <p>View on <a href="https://solscan.io/token/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4" target="_blank">Solscan</a></p>
+      </div>
+    </section>
   </div>
-
-  <!-- Meme GIFs   
-  <img class="gif" src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Cheese GIF" />
-  <img class="gif" src="https://media.giphy.com/media/KzJkzjggfGN5Py6nkT/giphy.gif" alt="Meme Ad" />
-  -->
-  <p>
-    $WAGMICE is a fair-launched meme coin on <strong>Pump.fun</strong><br>
-    🧀 1 Billion Supply — No VC — No Presale<br>
-    🐭 Powered by rats. Pumped by degenerates.
-  </p>
-
-  <!-- Cheese Clicker Iframe Inserted Here
-  <iframe src="cheese-clicker.html" width="100%" height="500" style="border:none;"></iframe>  -->
-
-<!-- Game Section -->
-<section>
-  <h2>Game</h2>
-  <button class="button" onclick="window.open('cheese-clicker.html', '_blank')">Cheese Clicker</button>
-</section>  
-
-  <!-- Duplicate CTA at Bottom -->
-  <a class="button" href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">
-    Buy Now on Pump.fun 🚀
-  </a>
-
-  <div class="links">
-    <p>Follow us on <a href="https://x.com/prithviraj987" target="_blank">X (Twitter)</a></p>
-    <p>View on <a href="https://solscan.io/token/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4" target="_blank">Solscan</a></p>
-  </div>
-
 </body>
 </html>
