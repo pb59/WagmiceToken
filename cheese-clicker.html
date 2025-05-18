@@ -251,6 +251,7 @@
         // Game state
         let player;
         let cheeses = [];
+        let level = 1;
         let score = 0;
         let missed = 0;
         const maxMissed = 5;
@@ -381,6 +382,7 @@
             updateScoreboard();
             updateMissedCounter();
             messageBox.style.display = 'none';
+            startButton.style.display = 'inline-block'; // Show the button again for normal game over
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
             gameLoop();
         }
@@ -412,6 +414,11 @@
                     chompSound.currentTime = 0;
                     chompSound.play();
                     updateScoreboard();
+                    if (level === 1 && score >= 100) {
+                        gameOver = true;
+                        showLevelCompleteScreen();
+                        return;
+                    }
                 }
                 // Check if cheese is missed
                 else if (cheese.y > canvas.height) {
@@ -428,6 +435,14 @@
         function updateScoreboard() {
             scoreBoard.textContent = `Score: ${score}`;
         }
+        function showLevelCompleteScreen() {
+            messageTitle.textContent = 'Level 1 Complete!';
+            messageText.innerHTML = `🎉 You caught 10 cheese!<br><br>
+            To unlock Level 2, <a href="YOUR_TOKEN_LINK_HERE" target="_blank" style="color:#2563eb;text-decoration:underline;">buy a token here</a>.<br><br>
+            After buying, reload the page to play Level 2.`;
+            startButton.style.display = 'none';
+            messageBox.style.display = 'flex';
+        }    
         function updateMissedCounter() {
             missedCounterDisplay.textContent = `Missed: ${missed} / ${maxMissed}`;
         }
@@ -442,12 +457,21 @@
                 }
             }
         }
+        function showLevelCompleteScreen() {
+            messageTitle.textContent = 'Level 1 Complete!';
+            messageText.innerHTML = `🎉 You caught 10 cheese!<br><br>
+            To unlock Level 2, <a href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank" style="color:#2563eb;text-decoration:underline;">buy WAGMICE TOKEN here</a>.<br><br>
+            After buying, reload the page to play Level 2.`;
+        startButton.style.display = 'none';
+        messageBox.style.display = 'flex';
+}
 
         function showGameOverScreen() {
             messageTitle.textContent = 'Game Over!';
             messageText.innerHTML = `🧀 You caught ${score / 10} cheeses! 🧀<br>Final Score: ${score}`;
             startButton.textContent = 'Play Again?';
             messageBox.style.display = 'flex';
+            startButton.style.display = 'inline-block';
         }
 
         function gameLoop(timestamp) {
