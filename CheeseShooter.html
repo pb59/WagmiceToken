@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheese Catcher Deluxe</title> <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #60a5fa;
+            font-family: 'Press Start 2P', cursive;
+            color: #4b5563;
+            overflow: hidden;
+            touch-action: none;
+        }
+        #gameContainer {
+            border: 5px solid #ca8a04;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            background-color: #bfdbfe;
+            max-width: 100vw;
+            max-height: 98vh;
+        }
+        canvas {
+            display: block;
+            border-radius: 10px;
+            max-width: 100%;
+            height: auto;
+            cursor: crosshair; /* NEW: Indicate clickable canvas for shooting */
+        }
+        #uiContainer {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+        #scoreBoard {
+            font-size: 2em;
+            color: #f59e0b;
+            text-shadow: 2px 2px #854d0e;
+        }
+        #missedCounter {
+            font-size: 1em;
+            color: #ef4444;
+        }
+        #messageBox {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(250, 250, 240, 0.95);
+            color: #78350f;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 10;
+            border: 3px solid #facc15;
+            box-shadow: 0 0 25px rgba(250, 204, 21, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
+            max-width: 450px;
+        }
+        #messageBox h2 {
+            margin-top: 0;
+            font-size: 2em;
+            color: #d97706;
+        }
+        #messageBox p {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+        }
+        .gameButton {
+            background: linear-gradient(145deg, #f59e0b, #fbbf24);
+            color: #78350f;
+            border: 2px solid #b45309;
+            padding: 15px 30px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.1em;
+            cursor: pointer;
+            border-radius: 12px;
+            box-shadow: 0 5px #854d0e;
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+        }
+        .gameButton:hover {
+            background: linear-gradient(145deg, #fbbf24, #f59e0b);
+            box-shadow: 0 7px #854d0e;
+            transform: translateY(-2px);
+        }
+        .gameButton:active {
+            box-shadow: 0 3px #854d0e;
+            transform: translateY(0px);
+        }
+        @media (max-width: 600px) {
+            #scoreBoard { font-size: 1.5em; }
+            #missedCounter { font-size: 0.9em; }
+            #messageBox h2 { font-size: 1.6em; }
+            #messageBox p { font-size: 1em; }
+            .gameButton { padding: 12px 24px; font-size: 1em; }
+        }
+        @media (max-height: 500px) {
+            #uiContainer { margin-top: 10px; }
+            #scoreBoard { font-size: 1.2em; }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        <div id="messageBox">
+            <h2 id="messageTitle">Cheese Catcher Deluxe!</h2> <p id="messageText">Move the mouse to catch the falling cheese! 🧀 <br>Click to shoot lasers and score more points! <br>Don't miss too many!</p> <button id="startButton" class="gameButton">Start Game</button>
+        </div>
+    </div>
+    <div id="uiContainer">
+        <div id="scoreBoard">Score: 0</div>
+        <div id="missedCounter">Missed: 0 / 5</div>
+    </div>
+    <script>
+        // --- Image Assets ---
+        const mouseImg = new Image();
+        // MODIFIED: New mouse image URL. Replace with your preferred image.
+        mouseImg.src = 'https://www.transparentpng.com/thumb/mouse-cursor/black-mouse-cursor-arrow-icon-transparent-png-mE0nNo.png'; // Example: A more prominent cursor
+        const cheeseImg = new Image();
+        cheeseImg.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9c0.png';
+        
+        // --- Background Image Assets ---
+        const bgCloudImg = new Image();
+        bgCloudImg.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/2601.png';
+        const bgBirdImg = new Image();
+        bgBirdImg.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f426.png';
+        const bgCheeseImg = new Image(); // For background
+        bgCheeseImg.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9c0.png';
+
+        // --- Sound Assets ---
+        const chompSound = new Audio('chomp.mp3'); // Make sure you have this file
+        // NEW: Burst sound for shooting cheese. Make sure you have 'burst.mp3' or similar.
+        const burstSound = new Audio('burst.mp3'); 
+        burstSound.volume = 0.7; // Adjust volume if needed
+
+        // --- Background Animation State ---
+        let bgClouds = [];
+        let bgBirds = [];
+        let bgCheeses = []; // These are for the decorative background, not the game cheese
+        function initBackground(canvas) {
+            bgClouds = [];
+            for (let i = 0; i < 5; i++) {
+                bgClouds.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height * 0.3, speed: 0.2 + Math.random() * 0.3, size: 60 + Math.random() * 50 });
+            }
+            bgBirds = [];
+            for (let i = 0; i < 3; i++) {
+                bgBirds.push({ x: Math.random() * canvas.width, y: 40 + Math.random() * 80, speed: 0.6 + Math.random() * 0.5, size: 40 + Math.random() * 20, flip: Math.random() < 0.5 ? 1 : -1 });
+            }
+            bgCheeses = []; // Decorative background cheeses
+            for (let i = 0; i < 6; i++) {
+                bgCheeses.push({ x: Math.random() * canvas.width, y: -Math.random() * 300, speed: 0.7 + Math.random() * 0.7, size: 32 + Math.random() * 24});
+            }
+        }
+
+        function drawBackground(ctx, canvas) {
+            const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            bgGradient.addColorStop(0, "#bfe0ff");
+            bgGradient.addColorStop(0.8, "#e9f3ff");
+            bgGradient.addColorStop(1, "#e5e7b7");
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            bgClouds.forEach(cloud => {
+                ctx.globalAlpha = 0.8;
+                if (bgCloudImg.complete && bgCloudImg.naturalWidth) ctx.drawImage(bgCloudImg, cloud.x, cloud.y, cloud.size, cloud.size);
+                ctx.globalAlpha = 1.0;
+                cloud.x += cloud.speed;
+                if (cloud.x > canvas.width) cloud.x = -cloud.size;
+            });
+            bgBirds.forEach(bird => {
+                ctx.save();
+                ctx.globalAlpha = 0.95;
+                if (bgBirdImg.complete && bgBirdImg.naturalWidth) {
+                    if (bird.flip === -1) {
+                        ctx.translate(bird.x + bird.size, bird.y);
+                        ctx.scale(-1, 1);
+                        ctx.drawImage(bgBirdImg, 0, 0, bird.size, bird.size);
+                    } else {
+                        ctx.drawImage(bgBirdImg, bird.x, bird.y, bird.size, bird.size);
+                    }
+                }
+                ctx.restore();
+                ctx.globalAlpha = 1.0;
+                bird.x += bird.speed * bird.flip;
+                if (bird.flip === 1 && bird.x > canvas.width) bird.x = -bird.size;
+                if (bird.flip === -1 && bird.x < -bird.size) bird.x = canvas.width;
+            });
+            bgCheeses.forEach(chs => { // Decorative background cheeses
+                if (bgCheeseImg.complete && bgCheeseImg.naturalWidth) {
+                    ctx.globalAlpha = 0.5;
+                    ctx.drawImage(bgCheeseImg, chs.x, chs.y, chs.size, chs.size);
+                    ctx.globalAlpha = 1.0;
+                }
+                chs.y += chs.speed;
+                if (chs.y > canvas.height) {
+                    chs.y = -chs.size;
+                    chs.x = Math.random() * canvas.width;
+                }
+            });
+        }
+
+        // --- Game Logic ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreBoard = document.getElementById('scoreBoard');
+        const missedCounterDisplay = document.getElementById('missedCounter');
+        const messageBox = document.getElementById('messageBox');
+        const messageTitle = document.getElementById('messageTitle');
+        const messageText = document.getElementById('messageText');
+        const startButton = document.getElementById('startButton');
+        const gameContainer = document.getElementById('gameContainer');
+
+        // Game state
+        let player;
+        let cheeses = []; // Game cheeses
+        let lasers = []; // NEW: Array for lasers
+        let level = 1; 
+        let score = 0;
+        let missed = 0;
+        const maxMissed = 5;
+        let cheeseFallSpeed = 2;
+        let cheeseSpawnInterval = 1500;
+        let lastCheeseSpawnTime = 0;
+        let gameOver = true;
+        let animationFrameId;
+        let lastTime = 0;
+        let difficultyTimer = 0;
+        const difficultyInterval = 15000; 
+
+        // Object properties - these will be scaled
+        const playerBaseWidth = 60;  // MODIFIED: Increased for more prominence
+        const playerBaseHeight = 50; // MODIFIED: Increased for more prominence
+        const cheeseBaseSize = 30;
+
+        let playerWidth = playerBaseWidth;
+        let playerHeight = playerBaseHeight;
+        let cheeseSize = cheeseBaseSize;
+
+        let targetPlayerX = canvas.width / 2;
+        const MOUSE_EMOJI = '🖱️'; // Fallback if image fails
+        const CHEESE_EMOJI = '🧀';
+
+        // --- Player (Mouse) Class ---
+        class Player {
+            constructor(x, y, width, height, emoji) {
+                this.x = x;
+                this.y = y;
+                this.width = width;
+                this.height = height;
+                this.emoji = emoji;
+            }
+            draw() {
+                if (mouseImg.complete && mouseImg.naturalWidth > 0) { // Check naturalWidth > 0 for valid image
+                    ctx.drawImage(mouseImg, this.x, this.y, this.width, this.height);
+                } else {
+                    ctx.font = `${this.height * 0.8}px Arial`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(this.emoji, this.x + this.width / 2, this.y + this.height / 2);
+                }
+            }
+            update() {
+                const easing = 0.3; 
+                this.x += (targetPlayerX - (this.x + this.width / 2)) * easing;
+                if (this.x < 0) this.x = 0;
+                if (this.x + this.width > canvas.width) this.x = canvas.width - this.width;
+            }
+        }
+
+        // --- Cheese Class ---
+        class Cheese {
+            constructor(x, y, size, emoji, speed) {
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.emoji = emoji;
+                this.speed = speed;
+            }
+            draw() {
+                if (cheeseImg.complete && cheeseImg.naturalWidth > 0) {
+                    ctx.drawImage(cheeseImg, this.x, this.y, this.size, this.size);
+                } else {
+                    ctx.font = `${this.size * 0.8}px Arial`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(this.emoji, this.x + this.size / 2, this.y + this.size / 2);
+                }
+            }
+            update() {
+                this.y += this.speed;
+            }
+        }
+
+        // --- NEW: Laser Class ---
+        class Laser {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                // Scale laser dimensions based on typical canvas size for consistency
+                this.width = 5 * (Math.min(canvas.width, 1200) / 600); 
+                this.height = 20 * (Math.min(canvas.height, 900) / 400);
+                this.speed = 7 * (Math.min(canvas.height, 900) / 400); 
+                this.color = '#FF3131'; // A bright red for laser
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            }
+
+            update() {
+                this.y -= this.speed;
+            }
+        }
+
+
+        // --- Game Functions ---
+        function setCanvasAndElementSizes() {
+            const containerRect = gameContainer.getBoundingClientRect();
+            let newWidth = containerRect.width - 10; 
+            // MODIFIED: Increased canvas height percentage and max dimensions
+            let newHeight = window.innerHeight * 0.80; // Use 80% of window height
+            newHeight = Math.min(newHeight, newWidth * 0.75); // Maintain a reasonable aspect ratio
+
+            newWidth = Math.min(newWidth, 1600); // MODIFIED: Increased max width
+            newHeight = Math.min(newHeight, 1000); // MODIFIED: Increased max height
+            
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+            
+            const scaleFactor = Math.min(canvas.width / 600, canvas.height / 400); 
+            playerWidth = playerBaseWidth * scaleFactor;
+            playerHeight = playerBaseHeight * scaleFactor;
+            cheeseSize = cheeseBaseSize * scaleFactor;
+
+            if (player) {
+                player.y = canvas.height - player.height - 10; 
+                player.width = playerWidth;
+                player.height = playerHeight;
+            }
+            if (gameOver) {
+                targetPlayerX = canvas.width / 2;
+            }
+            initBackground(canvas); // Re-initialize background for new canvas size
+        }
+
+        function initGame() {
+            setCanvasAndElementSizes();
+            player = new Player(
+                canvas.width / 2 - playerWidth / 2,
+                canvas.height - playerHeight - 10,
+                playerWidth,
+                playerHeight,
+                MOUSE_EMOJI
+            );
+            targetPlayerX = canvas.width / 2;
+            cheeses = [];
+            lasers = []; // NEW: Clear lasers on game start
+            score = 0;
+            missed = 0;
+            cheeseFallSpeed = 2 * (canvas.height / 400); // Scale speed with canvas size
+            cheeseSpawnInterval = 1500; 
+            lastCheeseSpawnTime = performance.now();
+            difficultyTimer = 0;
+            gameOver = false;
+            lastTime = performance.now();
+            updateScoreboard();
+            updateMissedCounter();
+            messageBox.style.display = 'none';
+            startButton.style.display = 'inline-block';
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            gameLoop();
+        }
+
+        function spawnCheese() {
+            const currentTime = performance.now();
+            if (currentTime - lastCheeseSpawnTime > cheeseSpawnInterval) {
+                lastCheeseSpawnTime = currentTime;
+                const x = Math.random() * (canvas.width - cheeseSize);
+                const y = -cheeseSize;
+                cheeses.push(new Cheese(x, y, cheeseSize, CHEESE_EMOJI, cheeseFallSpeed));
+            }
+        }
+
+        function updateAndDrawCheeses() {
+            for (let i = cheeses.length - 1; i >= 0; i--) {
+                const cheese = cheeses[i];
+                cheese.update();
+                cheese.draw();
+                
+                // Check for collision with player (catching)
+                if (
+                    cheese.x < player.x + player.width &&
+                    cheese.x + cheese.size > player.x &&
+                    cheese.y < player.y + player.height &&
+                    cheese.y + cheese.size > player.y 
+                ) {
+                    cheeses.splice(i, 1);
+                    score += 10; // Catching is still 10 points
+                    chompSound.currentTime = 0;
+                    chompSound.play().catch(e => console.error("Chomp sound error:", e));
+                    updateScoreboard();
+                    if (level === 1 && score >= 100 && false) { // Temporarily disable level complete for testing shooting
+                        gameOver = true;
+                        showLevelCompleteScreen();
+                        return;
+                    }
+                }
+                else if (cheese.y > canvas.height) {
+                    cheeses.splice(i, 1);
+                    missed++;
+                    updateMissedCounter();
+                    if (missed >= maxMissed) {
+                        gameOver = true;
+                    }
+                }
+            }
+        }
+
+        // --- NEW: Function to update and draw lasers, and check hits ---
+        function updateAndDrawLasers() {
+            for (let i = lasers.length - 1; i >= 0; i--) {
+                const laser = lasers[i];
+                laser.update();
+                laser.draw();
+
+                // Check for collision with cheeses
+                for (let j = cheeses.length - 1; j >= 0; j--) {
+                    const cheese = cheeses[j];
+                    if (
+                        laser.x < cheese.x + cheese.size &&
+                        laser.x + laser.width > cheese.x &&
+                        laser.y < cheese.y + cheese.size &&
+                        laser.y + laser.height > cheese.y // Laser is tall, so check its full height
+                    ) {
+                        // Hit!
+                        cheeses.splice(j, 1);       // Remove cheese
+                        lasers.splice(i, 1);        // Remove laser
+                        score += 10;                // MODIFIED: Score for shooting
+                        burstSound.currentTime = 0;
+                        burstSound.play().catch(e => console.error("Burst sound error:", e)); // Play burst sound
+                        updateScoreboard();
+                        break; // Important: laser is gone, so stop checking this laser against other cheeses
+                    }
+                }
+
+                // Remove laser if it goes off-screen (top)
+                if (laser.y + laser.height < 0) {
+                    lasers.splice(i, 1);
+                }
+            }
+        }
+
+
+        function updateScoreboard() {
+            scoreBoard.textContent = `Score: ${score}`;
+        }
+
+        function updateMissedCounter() {
+            missedCounterDisplay.textContent = `Missed: ${missed} / ${maxMissed}`;
+        }
+
+        function increaseDifficulty(deltaTime) {
+            difficultyTimer += deltaTime;
+            if (difficultyTimer >= difficultyInterval) {
+                difficultyTimer = 0;
+                cheeseFallSpeed += 0.3 * (canvas.height / 400);
+                if (cheeseSpawnInterval > 500) { // Keep a minimum spawn interval
+                    cheeseSpawnInterval -= 100;
+                }
+            }
+        }
+        
+        function showLevelCompleteScreen() {
+            messageTitle.textContent = 'Level 1 Complete!';
+            messageText.innerHTML = `🎉 You caught/shot enough cheese!<br><br>
+            To unlock Level 2, <a href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank" style="color:#2563eb;text-decoration:underline;">buy WAGMICE TOKEN here</a>.<br><br>
+            After buying, reload the page to play Level 2.`;
+            startButton.style.display = 'none'; 
+            messageBox.style.display = 'flex';
+        }
+
+        function showGameOverScreen() {
+            messageTitle.textContent = 'Game Over!';
+            messageText.innerHTML = `🧀 You scored ${score} points! 🧀`; // Simpler message
+            startButton.textContent = 'Play Again?';
+            messageBox.style.display = 'flex';
+            startButton.style.display = 'inline-block';
+        }
+
+        // --- NEW: Function to handle shooting ---
+        function shootLaser() {
+            if (!gameOver && player) { // Check if player exists
+                const laserX = player.x + player.width / 2 - (new Laser(0,0).width / 2); // Center the laser
+                const laserY = player.y; // Start from the top of the player
+                lasers.push(new Laser(laserX, laserY));
+                // Optional: Add a laser shoot sound effect here
+                // shootSound.currentTime = 0;
+                // shootSound.play();
+            }
+        }
+
+        function gameLoop(timestamp) {
+            if (gameOver) {
+                if (score >= 100 && level === 1 && false) { // Temporarily disabled level complete
+                     showLevelCompleteScreen();
+                } else {
+                     showGameOverScreen();
+                }
+                return;
+            }
+
+            drawBackground(ctx, canvas);
+
+            if(player) { // Ensure player exists before updating/drawing
+                player.update();
+                player.draw();
+            }
+            
+            spawnCheese();
+            updateAndDrawCheeses();
+            updateAndDrawLasers();  // NEW: Call function for lasers
+
+            const deltaTime = timestamp - lastTime;
+            lastTime = timestamp;
+            if (!isNaN(deltaTime)) { // Ensure deltaTime is a number
+                 increaseDifficulty(deltaTime);
+            }
+
+
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        // --- Event Listeners ---
+        function handleInput(eventClientX) {
+            const rect = canvas.getBoundingClientRect();
+            targetPlayerX = eventClientX - rect.left;
+        }
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!gameOver && player) handleInput(e.clientX);
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!gameOver && e.touches.length > 0 && player) handleInput(e.touches[0].clientX);
+        }, { passive: false });
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!gameOver && e.touches.length > 0 && player) handleInput(e.touches[0].clientX);
+             // shootLaser(); // Optional: Shoot on touch start as well as click
+        }, { passive: false });
+
+        // NEW: Event listener for shooting on click
+        canvas.addEventListener('click', shootLaser);
+
+        startButton.addEventListener('click', () => {
+            if (gameOver) {
+                initGame();
+            }
+        });
+        
+        window.addEventListener('resize', () => {
+            setCanvasAndElementSizes(); // This will re-init background and adjust player
+            if (player && !gameOver) { // Ensure player position is updated correctly after resize
+                player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+                targetPlayerX = player.x + player.width / 2;
+            } else if (gameOver) { // If game over and resized, ensure player target is centered for next game
+                 targetPlayerX = canvas.width / 2;
+            }
+        });
+        
+        window.onload = () => {
+            setCanvasAndElementSizes();
+            targetPlayerX = canvas.width / 2; // Center mouse initially
+            messageBox.style.display = 'flex'; // Show initial message box
+        };
+    </script>
+</body>
+</html>
