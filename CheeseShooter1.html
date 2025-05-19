@@ -3,83 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cheese Catcher Deluxe Animation!</title> <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>Cheese Catcher Deluxe Animation!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-       #uiContainer {
-    position: fixed;
-    top: 80px;        /* Adjust as needed */
-    left: 20px;       /* Adjust as needed */
-    width: 180px;     /* Or your preferred width */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-    z-index: 100;
-    background: rgba(250,250,240,0.85); /* Optional for contrast */
-    border-radius: 12px;                /* Optional */
-    padding: 10px 16px;                 /* Optional */
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Optional */
-}
         body {
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
-            background-color: #60a5fa; /* Light blue background */
+            background-color: #60a5fa;
             font-family: 'Press Start 2P', cursive;
-            color: #4b5563; /* Dark gray text */
-            overflow: hidden; /* Prevent scrollbars */
-            touch-action: none; /* Disable touch actions like pinch-zoom */
+            color: #4b5563;
+            overflow: hidden;
+            touch-action: none;
         }
         #gameContainer {
-            border: 5px solid #ca8a04; /* Golden border */
+            border: 5px solid #ca8a04;
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             position: relative;
-            background-color: #bfdbfe; /* Lighter blue game area */
+            background-color: #bfdbfe;
             max-width: 100vw;
             max-height: 98vh;
+            margin-top: 40px;
         }
         canvas {
             display: block;
             border-radius: 10px;
             max-width: 100%;
             height: auto;
-            cursor: crosshair; /* Indicate clickable canvas for shooting */
+            cursor: crosshair;
         }
+        /* Scoreboard on the left */
         #uiContainer {
-            margin-top: 20px;
+            position: fixed;
+            top: 120px;
+            left: 20px;
+            width: 180px;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             gap: 15px;
-            width: 100%;
+            z-index: 100;
+            background: rgba(250,250,240,0.85);
+            border-radius: 12px;
+            padding: 10px 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
         #scoreBoard {
             font-size: 2em;
-            color: #f59e0b; /* Orange score */
-            text-shadow: 2p
-                x 2px #854d0e; /* Dark orange shadow */
+            color: #f59e0b;
+            text-shadow: 2px 2px #854d0e;
         }
         #missedCounter {
             font-size: 1em;
-            color: #ef4444; /* Red missed counter */
+            color: #ef4444;
+        }
+        /* Side Ads Styling */
+        .side-ad {
+            position: fixed;
+            top: 120px;
+            width: 180px;
+            padding: 16px 10px;
+            background: #facc15e6;
+            color: #78350f;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.9em;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            z-index: 999;
+            text-align: center;
+        }
+        #ad-left {
+            left: 20px;
+            /* Push down if overlaps scoreboard */
+            margin-top: 120px;
+        }
+        #ad-right {
+            right: 20px;
+        }
+        .side-ad a {
+            color: #2563eb;
+            text-decoration: underline;
+            display: block;
+            margin: 6px 0;
+        }
+        .side-ad a:hover {
+            color: #d97706;
         }
         #messageBox {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(250, 250, 240, 0.95); /* Off-white message box */
-            color: #78350f; /* Brown text */
+            background-color: rgba(250, 250, 240, 0.95);
+            color: #78350f;
             padding: 30px;
             border-radius: 20px;
             text-align: center;
             z-index: 10;
-            border: 3px solid #facc15; /* Yellow border */
+            border: 3px solid #facc15;
             box-shadow: 0 0 25px rgba(250, 204, 21, 0.7);
             display: flex;
             flex-direction: column;
@@ -90,22 +115,22 @@
         #messageBox h2 {
             margin-top: 0;
             font-size: 2em;
-            color: #d97706; /* Darker orange title */
+            color: #d97706;
         }
         #messageBox p {
             font-size: 1.1em;
             margin-bottom: 25px;
         }
         .gameButton {
-            background: linear-gradient(145deg, #f59e0b, #fbbf24); /* Orange gradient button */
-            color: #78350f; /* Brown text on button */
-            border: 2px solid #b45309; /* Darker orange border */
+            background: linear-gradient(145deg, #f59e0b, #fbbf24);
+            color: #78350f;
+            border: 2px solid #b45309;
             padding: 15px 30px;
             font-family: 'Press Start 2P', cursive;
             font-size: 1.1em;
             cursor: pointer;
             border-radius: 12px;
-            box-shadow: 0 5px #854d0e; /* Dark orange shadow for button */
+            box-shadow: 0 5px #854d0e;
             transition: all 0.1s ease;
             text-transform: uppercase;
         }
@@ -118,39 +143,57 @@
             box-shadow: 0 3px #854d0e;
             transform: translateY(0px);
         }
-        @media (max-width: 600px) { /* Responsive adjustments for smaller screens */
+        @media (max-width: 1000px) {
+            .side-ad, #uiContainer {
+                display: none;
+            }
+        }
+        @media (max-width: 600px) {
             #scoreBoard { font-size: 1.5em; }
             #missedCounter { font-size: 0.9em; }
             #messageBox h2 { font-size: 1.6em; }
             #messageBox p { font-size: 1em; }
             .gameButton { padding: 12px 24px; font-size: 1em; }
         }
-        @media (max-height: 500px) { /* Responsive adjustments for shorter screens */
+        @media (max-height: 500px) {
             #uiContainer { margin-top: 10px; }
             #scoreBoard { font-size: 1.2em; }
         }
     </style>
 </head>
 <body>
-    <div id="gameContainer">
-        <canvas id="gameCanvas"></canvas>
-        <div id="messageBox">
-            <h2 id="messageTitle">Cheese Catcher Deluxe!</h2>
-            <p id="messageText">Move your mouse to catch falling cheese! 🧀<br>Click to shoot lasers for extra points!<br>Don't miss too many!</p>
-            <button id="startButton" class="gameButton">Start Game</button>
-        </div>
+    <!-- Left Ad -->
+    <div id="ad-left" class="side-ad">
+        <strong>Buy WagmiceToken:</strong><br>
+        <a href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">Pump.fun</a><br>
+        <a href="https://jup.ag/tokens/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">Jupiter</a>
     </div>
+    <!-- Right Ad -->
+    <div id="ad-right" class="side-ad">
+        <strong>Buy WagmiceToken:</strong><br>
+        <a href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">Pump.fun</a><br>
+        <a href="https://jup.ag/tokens/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">Jupiter</a>
+    </div>
+    <!-- Scoreboard (left) -->
     <div id="uiContainer">
         <div id="scoreBoard">Score: 0</div>
         <div id="missedCounter">Missed: 0 / 5</div>
     </div>
-
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        <div id="messageBox">
+            <h2 id="messageTitle">Cheese Catcher Deluxe!</h2>
+            <p id="messageText">
+                Move your mouse to catch falling cheese! 🧀<br>
+                Click to shoot lasers for extra points!<br>
+                Don't miss too many!
+            </p>
+            <button id="startButton" class="gameButton">Start Game</button>
+        </div>
+    </div>
     <script>
         // --- Image Assets ---
-        const mouseImg = new Image(); // This will be our sprite sheet or larger image
-        // IMPORTANT: Replace 'YOUR_MOUSE_SPRITE_SHEET.png' with the actual path to your mouse image/sprite sheet.
-        // If it's a sprite sheet, make sure it's structured as expected by the Player class,
-        // or update the Player class's sprite handling logic.
+        const mouseImg = new Image();
         mouseImg.src = 'YOUR_MOUSE_SPRITE_SHEET.png'; // <<<< ----- REPLACE THIS PATH
 
         const cheeseImg = new Image();
@@ -161,18 +204,16 @@
         bgCloudImg.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/2601.png';
         const bgBirdImg = new Image();
         bgBirdImg.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f426.png';
-        const bgCheeseImg = new Image(); // For decorative background
+        const bgCheeseImg = new Image();
         bgCheeseImg.src = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f9c0.png';
 
         // --- Sound Assets ---
-        const chompSound = new Audio('chomp.mp3'); // Ensure 'chomp.mp3' is in the same directory
-        const burstSound = new Audio('burst.mp3'); // Ensure 'burst.mp3' is in the same directory
-        burstSound.volume = 0.7; // Adjust volume as needed
+        const chompSound = new Audio('chomp.mp3');
+        const burstSound = new Audio('burst.mp3');
+        burstSound.volume = 0.7;
 
         // --- Background Animation State ---
-        let bgClouds = [];
-        let bgBirds = [];
-        let bgCheeses = []; // Decorative background cheeses
+        let bgClouds = [], bgBirds = [], bgCheeses = [];
 
         function initBackground(canvasInstance) {
             bgClouds = [];
@@ -185,15 +226,14 @@
             }
             bgCheeses = [];
             for (let i = 0; i < 6; i++) {
-                bgCheeses.push({ x: Math.random() * canvasInstance.width, y: -Math.random() * 300, speed: 0.7 + Math.random() * 0.7, size: 32 + Math.random() * 24});
+                bgCheeses.push({ x: Math.random() * canvasInstance.width, y: -Math.random() * 300, speed: 0.7 + Math.random() * 0.7, size: 32 + Math.random() * 24 });
             }
         }
-
         function drawBackground(ctxInstance, canvasInstance) {
             const bgGradient = ctxInstance.createLinearGradient(0, 0, 0, canvasInstance.height);
-            bgGradient.addColorStop(0, "#bfe0ff"); // Light blue sky
-            bgGradient.addColorStop(0.8, "#e9f3ff"); // Fading to lighter
-            bgGradient.addColorStop(1, "#e5e7b7"); // Hint of yellow at horizon
+            bgGradient.addColorStop(0, "#bfe0ff");
+            bgGradient.addColorStop(0.8, "#e9f3ff");
+            bgGradient.addColorStop(1, "#e5e7b7");
             ctxInstance.fillStyle = bgGradient;
             ctxInstance.fillRect(0, 0, canvasInstance.width, canvasInstance.height);
 
@@ -249,7 +289,7 @@
 
         // Game state
         let player;
-        let cheeses = []; // Game cheeses
+        let cheeses = [];
         let lasers = [];
         let level = 1;
         let score = 0;
@@ -262,19 +302,19 @@
         let animationFrameId;
         let lastTime = 0;
         let difficultyTimer = 0;
-        const difficultyInterval = 15000; // Increase difficulty every 15 seconds
+        const difficultyInterval = 15000;
 
         // Object properties - these will be scaled
-        const playerBaseWidth = 80;  // MODIFIED: Larger base width for mouse
-        const playerBaseHeight = 70; // MODIFIED: Larger base height for mouse
+        const playerBaseWidth = 80;
+        const playerBaseHeight = 70;
         const cheeseBaseSize = 30;
 
         let playerWidth = playerBaseWidth;
         let playerHeight = playerBaseHeight;
         let cheeseSize = cheeseBaseSize;
 
-        let targetPlayerX = canvas.width / 2;
-        const MOUSE_EMOJI = '🖱️'; // Fallback emoji if image/sprite fails
+        let targetPlayerX = 300;
+        const MOUSE_EMOJI = '🖱️';
         const CHEESE_EMOJI = '🧀';
 
         // --- Player (Mouse) Class ---
@@ -284,16 +324,14 @@
                 this.y = y;
                 this.width = width;
                 this.height = height;
-                this.spriteSheet = image; // The sprite sheet or single image
+                this.spriteSheet = image;
 
                 // Animation properties
                 this.spriteFrameWidth = 0;
                 this.spriteFrameHeight = 0;
-                // IMPORTANT: Adjust numberOfFrames based on YOUR sprite sheet.
-                // This example assumes 4 frames in a horizontal row.
-                this.numberOfFrames = 4;   // Default to 4, adjust if your sprite has different frame count
+                this.numberOfFrames = 4;
                 this.currentFrame = 0;
-                this.animationSpeed = 10; // Game loops per animation frame (lower is faster)
+                this.animationSpeed = 10;
                 this.animationTick = 0;
 
                 if (this.spriteSheet.complete && this.spriteSheet.naturalWidth > 0) {
@@ -304,28 +342,21 @@
                     };
                 }
             }
-
             setSpriteSheetProperties() {
                 if (!this.spriteSheet.complete || this.spriteSheet.naturalWidth === 0) return;
-
-                // *** CRUCIAL: Adjust this logic based on YOUR sprite sheet structure ***
-                // This example assumes frames are in a single horizontal row.
-                // If numberOfFrames is 1, it means it's a single (non-animated) image.
-                if (this.numberOfFrames <= 1) { // Handles single image or if user sets 1 frame
+                if (this.numberOfFrames <= 1) {
                     this.spriteFrameWidth = this.spriteSheet.naturalWidth;
                     this.spriteFrameHeight = this.spriteSheet.naturalHeight;
-                    this.numberOfFrames = 1; // Ensure it's 1 for non-animated
+                    this.numberOfFrames = 1;
                 } else {
                     this.spriteFrameWidth = this.spriteSheet.naturalWidth / this.numberOfFrames;
                     this.spriteFrameHeight = this.spriteSheet.naturalHeight;
                 }
             }
-
             draw() {
                 if (this.spriteSheet.complete && this.spriteSheet.naturalWidth > 0 && this.spriteFrameWidth > 0) {
                     const sourceX = this.currentFrame * this.spriteFrameWidth;
-                    const sourceY = 0; // Assuming frames are in a single row
-
+                    const sourceY = 0;
                     ctx.drawImage(
                         this.spriteSheet,
                         sourceX, sourceY,
@@ -334,20 +365,19 @@
                         this.width, this.height
                     );
                 } else if (!this.spriteSheet.complete) {
-                    ctx.fillStyle = 'rgba(128, 128, 128, 0.5)'; // Semi-transparent gray
+                    ctx.fillStyle = 'rgba(128, 128, 128, 0.5)';
                     ctx.fillRect(this.x, this.y, this.width, this.height);
                     ctx.fillStyle = 'white';
                     ctx.font = `${Math.min(this.height * 0.3, 12)}px "Press Start 2P"`;
                     ctx.textAlign = 'center';
                     ctx.fillText("Load...", this.x + this.width / 2, this.y + this.height / 2);
-                } else { // Fallback to emoji if image failed or properties not set
+                } else {
                     ctx.font = `${this.height * 0.8}px Arial`;
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillText(MOUSE_EMOJI, this.x + this.width / 2, this.y + this.height / 2);
                 }
             }
-
             update() {
                 // Player position easing
                 const easing = 0.3;
@@ -362,7 +392,7 @@
                         this.animationTick = 0;
                         this.currentFrame++;
                         if (this.currentFrame >= this.numberOfFrames) {
-                            this.currentFrame = 0; // Loop animation
+                            this.currentFrame = 0;
                         }
                     }
                 }
@@ -401,20 +431,17 @@
                 this.baseWidth = 5;
                 this.baseHeight = 20;
                 this.baseSpeed = 7;
-                // Scale laser based on a reference canvas size for consistency
                 const scaleRefWidth = 600;
                 const scaleRefHeight = 400;
                 this.width = this.baseWidth * (Math.min(canvas.width, 1200) / scaleRefWidth);
                 this.height = this.baseHeight * (Math.min(canvas.height, 900) / scaleRefHeight);
                 this.speed = this.baseSpeed * (Math.min(canvas.height, 900) / scaleRefHeight);
-                this.color = '#FF3131'; // Bright red laser
+                this.color = '#FF3131';
             }
-
             draw() {
                 ctx.fillStyle = this.color;
                 ctx.fillRect(this.x, this.y, this.width, this.height);
             }
-
             update() {
                 this.y -= this.speed;
             }
@@ -423,51 +450,47 @@
         // --- Game Functions ---
         function setCanvasAndElementSizes() {
             const containerRect = gameContainer.getBoundingClientRect();
-            let newWidth = containerRect.width - 10; // Keep a small padding from container edge
-
-            // MODIFIED: Making play screen larger
-            let newHeight = window.innerHeight * 0.80; // Try using 80% of window height
-            newHeight = Math.min(newHeight, newWidth * 0.75); // Maintain a reasonable aspect ratio (e.g., 4:3 or 16:9)
-
-            newWidth = Math.min(newWidth, 1600); // Increased max width
-            newHeight = Math.min(newHeight, 1000); // Increased max height
+            let newWidth = containerRect.width - 10;
+            let newHeight = window.innerHeight * 0.80;
+            newHeight = Math.min(newHeight, newWidth * 0.75);
+            newWidth = Math.min(newWidth, 1600);
+            newHeight = Math.min(newHeight, 1000);
 
             canvas.width = newWidth;
             canvas.height = newHeight;
 
-            // Scale game elements based on canvas size for responsiveness
-            const scaleFactor = Math.min(canvas.width / 600, canvas.height / 400); // Base reference size
+            const scaleFactor = Math.min(canvas.width / 600, canvas.height / 400);
             playerWidth = playerBaseWidth * scaleFactor;
             playerHeight = playerBaseHeight * scaleFactor;
             cheeseSize = cheeseBaseSize * scaleFactor;
 
             if (player) {
-                player.y = canvas.height - player.height - 10; // Position player at bottom
+                player.y = canvas.height - player.height - 10;
                 player.width = playerWidth;
                 player.height = playerHeight;
-                if (player.spriteSheet.complete) player.setSpriteSheetProperties(); // Re-evaluate sprite if needed
+                if (player.spriteSheet.complete) player.setSpriteSheetProperties();
             }
             if (gameOver) {
                 targetPlayerX = canvas.width / 2;
             }
-            initBackground(canvas); // Re-initialize background for new canvas size
+            initBackground(canvas);
         }
 
         function initGame() {
-            setCanvasAndElementSizes(); // Set sizes first
+            setCanvasAndElementSizes();
             player = new Player(
                 canvas.width / 2 - playerWidth / 2,
                 canvas.height - playerHeight - 10,
                 playerWidth,
                 playerHeight,
-                mouseImg // Pass the mouseImg (sprite sheet or single image)
+                mouseImg
             );
             targetPlayerX = canvas.width / 2;
             cheeses = [];
             lasers = [];
             score = 0;
             missed = 0;
-            cheeseFallSpeed = 2 * (canvas.height / 400); // Scale speed with canvas height
+            cheeseFallSpeed = 2 * (canvas.height / 400);
             cheeseSpawnInterval = 1500;
             lastCheeseSpawnTime = performance.now();
             difficultyTimer = 0;
@@ -486,7 +509,7 @@
             if (currentTime - lastCheeseSpawnTime > cheeseSpawnInterval) {
                 lastCheeseSpawnTime = currentTime;
                 const x = Math.random() * (canvas.width - cheeseSize);
-                const y = -cheeseSize; // Start above screen
+                const y = -cheeseSize;
                 cheeses.push(new Cheese(x, y, cheeseSize, CHEESE_EMOJI, cheeseFallSpeed));
             }
         }
@@ -496,193 +519,10 @@
                 const cheese = cheeses[i];
                 cheese.update();
                 cheese.draw();
-
-                // Check for collision with player (catching)
+                // Check for collision with player
                 if (
                     cheese.x < player.x + player.width &&
                     cheese.x + cheese.size > player.x &&
                     cheese.y < player.y + player.height &&
-                    cheese.y + cheese.size > player.y
-                ) {
-                    cheeses.splice(i, 1);
-                    score += 10; // Catching is 10 points
-                    chompSound.currentTime = 0;
-                    chompSound.play().catch(e => console.error("Chomp sound error:", e));
-                    updateScoreboard();
-                    // Link to level 2 was part of original code, keeping its conditional logic structure
-                    if (level === 1 && score >= 100000) { // Made this score very high to effectively disable for now
-                        gameOver = true;
-                        showLevelCompleteScreen();
-                        return;
-                    }
-                }
-                // Check if cheese is missed (goes off bottom of screen)
-                else if (cheese.y > canvas.height) {
-                    cheeses.splice(i, 1);
-                    missed++;
-                    updateMissedCounter();
-                    if (missed >= maxMissed) {
-                        gameOver = true;
-                    }
-                }
-            }
-        }
-
-        function updateAndDrawLasers() {
-            for (let i = lasers.length - 1; i >= 0; i--) {
-                const laser = lasers[i];
-                laser.update();
-                laser.draw();
-
-                // Check for collision with cheeses
-                for (let j = cheeses.length - 1; j >= 0; j--) {
-                    const cheese = cheeses[j];
-                    if (
-                        laser.x < cheese.x + cheese.size &&
-                        laser.x + laser.width > cheese.x &&
-                        laser.y < cheese.y + cheese.size &&
-                        laser.y + laser.height > cheese.y
-                    ) {
-                        cheeses.splice(j, 1); // Remove cheese
-                        lasers.splice(i, 1);  // Remove laser
-                        score += 10;          // Score for shooting cheese
-                        burstSound.currentTime = 0;
-                        burstSound.play().catch(e => console.error("Burst sound error:", e));
-                        updateScoreboard();
-                        break; // Laser is gone, no need to check against other cheeses
-                    }
-                }
-                // Remove laser if it goes off-screen (top)
-                if (laser.y + laser.height < 0) {
-                    lasers.splice(i, 1);
-                }
-            }
-        }
-
-        function updateScoreboard() {
-            scoreBoard.textContent = `Score: ${score}`;
-        }
-
-        function updateMissedCounter() {
-            missedCounterDisplay.textContent = `Missed: ${missed} / ${maxMissed}`;
-        }
-
-        function increaseDifficulty(deltaTime) {
-            difficultyTimer += deltaTime;
-            if (difficultyTimer >= difficultyInterval) {
-                difficultyTimer = 0;
-                cheeseFallSpeed += 0.3 * (canvas.height / 400); // Increase fall speed
-                if (cheeseSpawnInterval > 500) { // Ensure spawn interval doesn't get too short
-                    cheeseSpawnInterval -= 100; // Spawn cheese more frequently
-                }
-            }
-        }
-
-        function showLevelCompleteScreen() { // This was in the original code
-            messageTitle.textContent = 'Level 1 Complete!';
-            messageText.innerHTML = `🎉 You caught/shot enough cheese!<br><br>
-            To unlock Level 2, <a href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank" style="color:#2563eb;text-decoration:underline;">buy WAGMICE TOKEN here</a>.<br><br>
-            After buying, reload the page to play Level 2.`;
-            startButton.style.display = 'none';
-            messageBox.style.display = 'flex';
-        }
-
-        function showGameOverScreen() {
-            messageTitle.textContent = 'Game Over!';
-            messageText.innerHTML = `🧀 Your Final Score: ${score} 🧀`;
-            startButton.textContent = 'Play Again?';
-            messageBox.style.display = 'flex';
-            startButton.style.display = 'inline-block';
-        }
-
-        function shootLaser() {
-            if (!gameOver && player) { // Only shoot if game is active and player exists
-                // Calculate laser starting X to be center of the player
-                const laserX = player.x + player.width / 2 - (new Laser(0,0).width / 2);
-                const laserY = player.y; // Start from the top of the player
-                lasers.push(new Laser(laserX, laserY));
-                // Optional: Add a laser shooting sound effect here
-                // e.g., shootSound.currentTime = 0; shootSound.play();
-            }
-        }
-
-        function gameLoop(timestamp) {
-            if (gameOver) {
-                // Logic for showing level complete or game over screen
-                if (score >= 100000 && level === 1) { // Using a high score threshold for level complete
-                    showLevelCompleteScreen();
-                } else {
-                    showGameOverScreen();
-                }
-                return; // Stop the game loop
-            }
-
-            // Ensure timestamp is valid for deltaTime calculation
-            if (typeof lastTime !== 'number') lastTime = timestamp;
-            const deltaTime = timestamp - lastTime;
-            lastTime = timestamp;
-
-            drawBackground(ctx, canvas); // Draw background first
-
-            if (player) { // Ensure player exists before updating/drawing
-                player.update();
-                player.draw();
-            }
-
-            spawnCheese();
-            updateAndDrawCheeses();
-            updateAndDrawLasers(); // Handle laser logic
-
-            if (!isNaN(deltaTime) && deltaTime > 0) { // Increase difficulty based on time passed
-                increaseDifficulty(deltaTime);
-            }
-
-            animationFrameId = requestAnimationFrame(gameLoop); // Continue the loop
-        }
-
-        // --- Event Listeners ---
-        function handleInput(eventClientX) {
-            const rect = canvas.getBoundingClientRect();
-            targetPlayerX = eventClientX - rect.left;
-        }
-
-        canvas.addEventListener('mousemove', (e) => {
-            if (!gameOver && player) handleInput(e.clientX);
-        });
-        canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault(); // Prevent screen scrolling on touch
-            if (!gameOver && e.touches.length > 0 && player) handleInput(e.touches[0].clientX);
-        }, { passive: false });
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (!gameOver && e.touches.length > 0 && player) handleInput(e.touches[0].clientX);
-            // shootLaser(); // Optional: Allow shooting on touch start as well as click
-        }, { passive: false });
-
-        canvas.addEventListener('click', shootLaser); // Shoot on mouse click
-
-        startButton.addEventListener('click', () => {
-            if (gameOver) {
-                initGame(); // Restart game
-            }
-        });
-
-        window.addEventListener('resize', () => {
-            setCanvasAndElementSizes(); // Adjust canvas and elements on window resize
-            if (player && !gameOver) { // Reposition player if game is active
-                player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-                targetPlayerX = player.x + player.width / 2;
-            } else if (gameOver) { // If game over, just ensure target is centered for next game
-                 targetPlayerX = canvas.width / 2;
-            }
-        });
-
-        // Initial Setup when the page loads
-        window.onload = () => {
-            setCanvasAndElementSizes(); // Set initial canvas size
-            targetPlayerX = canvas.width / 2; // Center the mouse target initially
-            messageBox.style.display = 'flex'; // Show the initial message box
-        };
-    </script>
-</body>
-</html>
+                    cheese.y +*
+
