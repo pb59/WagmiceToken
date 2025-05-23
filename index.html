@@ -3,46 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <title>$WAGMICE — Solana Meme Token | 1B Supply | Pump.fun</title>
-  <meta name="description" content="$WAGMICE (WGM) is a viral Solana meme token with a 1 billion supply launched on Pump.fun. Join the cheese cult. No roadmap. Just vibes. Play the game, buy the token, meme your way to the moon.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="$WAGMICE (WGM) is a viral Solana meme token with a 1 billion supply launched on Pump.fun. Join the cheese cult. No roadmap. Just vibes. Play the game, buy the token, and meme!">
   <meta name="keywords" content="Solana meme token, pump.fun, WAGMICE, crypto meme coin, WGM, Solana token, funny crypto, cheese coin, meme game">
   <meta name="author" content="WAGMICE Community">
-  
   <meta property="og:title" content="$WGM — WAGMICE: Solana's Cheesiest Token">
   <meta property="og:description" content="No roadmap. No VCs. Just cheese. Play the game, buy the token, meme your way to the moon. $WAGMICE is a 1 billion supply fair launch on Pump.fun.">
-  <meta property="og:image" content="https://pb59.github.io/WagmiceToken/wagmice-logo.png"> <meta property="og:url" content="https://pb59.github.io/WagmiceToken/">
+  <meta property="og:image" content="https://pb59.github.io/WagmiceToken/wagmice-logo.png">
+  <meta property="og:url" content="https://pb59.github.io/WagmiceToken/">
   <meta property="og:type" content="website">
-  
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="$WGM — WAGMICE: Solana's Cheesiest Token">
   <meta name="twitter:description" content="No roadmap. No VCs. Just cheese. Play the game, buy the token, meme your way to the moon.">
   <meta name="twitter:image" content="https://pb59.github.io/WagmiceToken/wagmice-logo.png">
 
   <style>
-    body {
-      background-color: #f8f0e3; /* Lighter, slightly creamy cheese-themed background */
-      color: #4a3f35; /* Darker brown text for contrast */
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      text-align: center;
-      padding: 2rem;
+    html, body {
       margin: 0;
-      line-height: 1.6;
+      padding: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #f8f0e3;
+      color: #4a3f35;
+      min-height: 100vh;
+    }
+    .main-layout {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 2.5rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .left-section {
+      min-width: 280px;
+      max-width: 320px;
+      background: #fffaf0;
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      text-align: left;
+      margin-bottom: 2rem;
+      border: 1px solid #eee0b4;
+    }
+    .main-content {
+      flex: 1;
+      min-width: 0;
+      padding: 0 1rem;
+    }
+    .sidebar {
+      width: 300px;
+      background: #fafbfc;
+      border-left: 2px solid #e1e4e8;
+      padding: 24px 20px;
+      box-sizing: border-box;
+      min-height: 100vh;
+      position: sticky;
+      top: 0;
+      text-align: left;
+      transition: right 0.3s;
+      z-index: 999;
+    }
+    .sidebar p {
+      margin: 0 0 16px;
+    }
+    .sidebar strong { color: #333; }
+    .sidebar a {
+      color: #0077cc;
+      text-decoration: none;
+    }
+    .sidebar a:hover {
+      text-decoration: underline;
     }
     img, .gif {
-      max-width: 300px; /* Slightly reduced max-width for better proportion */
+      max-width: 300px;
       margin: 1.5rem auto;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* Softer shadow for images */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       display: block;
     }
     .button {
-      background-color: #ffc107; /* Bright cheese yellow */
-      color: #332e2a; /* Dark text for button */
+      background-color: #ffc107;
+      color: #332e2a;
       padding: 1rem 2rem;
-      border: 2px solid #e0a800; /* Darker yellow border */
+      border: 2px solid #e0a800;
       font-weight: bold;
       font-size: 1.2rem;
       border-radius: 8px;
-      margin: 1rem 0.5rem; /* Adjusted margin for better spacing */
+      margin: 1rem 0.5rem;
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
@@ -50,330 +98,112 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     .button:hover, .button:focus {
-      background-color: #e0a800; /* Darker on hover */
+      background-color: #e0a800;
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
     .meme-text {
-      font-size: 1.2rem; /* Slightly larger meme text */
-      color: #d48c00; /* Goldenrod color for meme text */
+      font-size: 1.2rem;
+      color: #d48c00;
       margin: 1.5rem auto;
       font-weight: bold;
     }
     .links {
-      margin-top: 2.5rem; /* Increased spacing */
+      margin-top: 2.5rem;
       font-size: 1rem;
     }
     .links a {
-      color: #c77700; /* Darker orange for links */
+      color: #c77700;
       text-decoration: underline;
-      font-weight: bold; /* Bolder links */
+      font-weight: bold;
     }
     .links a:hover {
-      color: #995c00; /* Even darker on hover */
+      color: #995c00;
     }
-
-    /* Main layout for left-side game section */
-    .main-layout {
-      display: flex;
-      justify-content: center; /* Centered layout for wider screens */
-      align-items: flex-start;
-      gap: 2.5rem; /* Increased gap */
-      max-width: 1200px;
-      margin: 2rem auto; /* Added top/bottom margin */
-    }
-    .left-section {
-      min-width: 280px; /* Slightly wider */
-      max-width: 320px; /* Slightly wider */
-      background: #fffaf0; /* Creamy white background for left section */
-      padding: 1.5rem;
-      border-radius: 16px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.1); /* Enhanced shadow */
-      text-align: left;
-      margin-bottom: 2rem;
-      border: 1px solid #eee0b4; /* Light border */
-    }
-    .main-content {
-      flex: 1;
-      min-width: 0;
-      padding: 0 1rem; /* Padding for main content on smaller views */
-    }
-    
+    /* Animation for scroll */
+    .section-animate { opacity: 0; transform: translateY(30px); transition: all 0.6s; }
+    .section-animate.visible { opacity: 1; transform: none; }
     /* Responsive for mobile */
     @media (max-width: 900px) {
       .main-layout {
         flex-direction: column;
-        align-items: center; /* Center items in column layout */
+        align-items: stretch;
         gap: 2rem;
-      }
-      .left-section {
-        max-width: 90%; /* Allow left section to be wider on mobile */
-        text-align: center;
-      }
-      .main-content {
-        text-align: center;
-      }
-       img, .gif {
-        max-width: 280px;
-      }
-    }
-
-    /* Flashy Cheese Clicker button */
-    .flashy-cheese-btn {
-      background: linear-gradient(90deg, #ffeb3b 0%, #ffc107 100%); /* Brighter cheese gradient */
-      color: #4a3f35; /* Darker text for better contrast */
-      font-weight: bold;
-      font-size: 1.3rem; /* Slightly smaller for balance */
-      padding: 1.2rem 2.2rem;
-      border: none;
-      border-radius: 50px;
-      box-shadow: 0 0 20px 6px rgba(255, 234, 0, 0.7), 0 2px 12px rgba(255, 136, 0, 0.5) inset;
-      cursor: pointer;
-      outline: none;
-      transition: transform 0.18s, box-shadow 0.18s;
-      animation: cheese-glow 1.2s infinite alternate, cheese-bounce 1s infinite alternate;
-      position: relative;
-      z-index: 2;
-      margin: 1.5rem auto; /* Adjusted margin */
-      display: block;
-    }
-    .flashy-cheese-btn:hover {
-      transform: translateY(-3px) scale(1.05); /* Enhanced hover bounce */
-    }
-    @keyframes cheese-glow {
-      0% { box-shadow: 0 0 14px 5px rgba(255, 234, 0, 0.6), 0 2px 8px rgba(255, 136, 0, 0.4) inset; }
-      100% { box-shadow: 0 0 28px 12px rgba(255, 234, 0, 0.8), 0 2px 20px rgba(255, 136, 0, 0.6) inset; }
-    }
-    @keyframes cheese-bounce {
-      0% { transform: translateY(0) scale(1); }
-      100% { transform: translateY(-6px) scale(1.08); } /* Increased bounce */
-    }
-
-    /* Award Advertisement */
-    .award-ad {
-      background: linear-gradient(135deg, #ffdd57 50%, #ffc107 100%); /* Sunny yellow gradient */
-      border-radius: 18px;
-      padding: 1.5rem 1.2rem; /* Adjusted padding */
-      margin: 0 auto 2rem auto; /* Increased bottom margin */
-      max-width: 370px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.12), 0 1.5px 0 #fff9e0 inset; /* Refined shadow */
-      text-align: center;
-      border: 3px solid #fff8dc; /* Lighter, creamy border */
-      color: #5d4037; /* Brownish text color */
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      position: relative;
-      overflow: hidden;
-    }
-    .award-ad .trophy {
-      font-size: 3rem; /* Larger trophy */
-      display: block;
-      margin-bottom: 0.5rem;
-      animation: trophy-pop 1.5s infinite alternate;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Shadow for trophy */
-    }
-    @keyframes trophy-pop {
-      0% { transform: scale(1) rotate(-6deg);}
-      100% { transform: scale(1.2) rotate(7deg);} /* More pop */
-    }
-    .award-ad .title {
-      font-size: 1.6rem; /* Larger title */
-      font-weight: bold;
-      margin-bottom: 0.6rem;
-      letter-spacing: 1px; /* Reduced letter spacing for readability */
-      color: #4e342e; /* Darker brown for title */
-    }
-    .award-ad .desc {
-      font-size: 1.05rem; /* Slightly smaller for balance */
-      margin-bottom: 0.8rem; /* Increased spacing */
-    }
-    .award-ad .highlight {
-      color: #fff;
-      background: #ff8f00; /* More vibrant orange highlight */
-      padding: 0.3em 0.8em;
-      border-radius: 10px;
-      font-weight: bold;
-      margin-top: 0.5rem;
-      display: inline-block;
-      font-size: 1.1rem;
-      letter-spacing: 0.5px; /* Reduced letter spacing */
-      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-    }
-    
-    /* Section Titles */
-    h1, h2 {
-        color: #c77700; /* Dark orange for headers */
-        text-shadow: 1px 1px 2px rgba(255,240,200,0.7); /* Subtle text shadow */
-    }
-    .left-section h2 {
-        text-align: center;
-        margin-bottom: 1.5rem;
-    }
-    
-    /* Community Section */
-    #community {
-      text-align: center; 
-      padding: 50px 20px; 
-      background-color: #fff8e1; /* Light creamy yellow for community section */
-      border-top: 2px solid #ffe082; /* Separator line */
-    }
-    #community h2 {
-      font-family: 'Press Start 2P', cursive; 
-      color: #ff8f00; /* Vibrant orange */
-      font-size: 1.8em; /* Larger community title */
-      margin-bottom: 1rem;
-    }
-    #community p {
-      font-size: 1.15em; 
-      color: #5d4037; /* Brownish text */
-      margin-bottom: 1.5rem;
-    }
-    #community a {
-      color: white; 
-      padding: 14px 28px; 
-      border-radius: 10px; 
-      font-weight: bold; 
-      text-decoration: none; 
-      display: inline-block; 
-      margin: 10px 8px; /* Increased margin */
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    }
-    #community a:hover {
-        transform: translateY(-2px) scale(1.03);
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-    /* Specific button colors for Telegram links */
-    #community a[href*="t.me/wagmice"] { background-color: #0088cc; } /* Original Telegram */
-    #community a[href*="t.me/WAGMICE"] { background-color: #229ED9; } /* Public Telegram */
-    #community a[href*="t.me/WAGMICEpvt"] { background-color: #0077b5; } /* Private Telegram (darker blue) */
-    
-    #community .contact-email { /* Class for email link parent */
-      margin-top:25px; 
-      font-size:1.05em; 
-      color:#4a3f35;
-    }
-    #community .contact-email a {
-        background-color: transparent; /* Remove button background for email */
-        color:#ff8f00; /* Orange to match H2 */
         padding: 0;
-        box-shadow: none;
-        font-weight: normal; /* Normal weight for email link */
+      }
+      .left-section, .sidebar {
+        max-width: 100%;
+        min-width: unset;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      }
+      .sidebar {
+        position: fixed;
+        right: -320px;
+        top: 0;
+        height: 100vh;
+        width: 300px;
+        z-index: 1000;
+        border-left: none;
+        border-top: 2px solid #e1e4e8;
+        padding-top: 60px;
+        transition: right 0.3s;
+      }
+      .sidebar.open { right: 0; }
+      #sidebarToggle {
+        display: block;
+      }
     }
-     #community .contact-email a:hover {
-        text-decoration: underline;
-        transform: none; /* No transform on hover for email link */
-        box-shadow: none;
-    }
-
-
-    @media (max-width: 700px) {
-      .award-ad { max-width: 95%; } /* Adjusted for slightly more padding on mobile */
-      .main-layout { padding: 0 0.5rem; } /* Add small horizontal padding to main layout on mobile */
-      body { padding: 1rem; } /* Reduce body padding on mobile */
-      h1 { font-size: 2em; }
-      h2 { font-size: 1.6em; }
-      .flashy-cheese-btn { font-size: 1.2rem; padding: 1rem 2rem; }
+    #sidebarToggle {
+      display: none;
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 1100;
+      background: #ffc107;
+      color: #332e2a;
+      border: none;
+      padding: 10px 16px;
+      font-size: 1.3rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
+  <!-- Sidebar Toggle Button (mobile only) -->
+  <button id="sidebarToggle">☰ Links</button>
+
+  <!-- Solana Ticker -->
   <div id="solana-ticker" style="background:#111; color:#00ffa3; padding:10px; text-align:center; font-family:monospace;">
-  Loading SOL price...
-</div>
-
-<script>
-  async function updateSolanaPrice() {
-    try {
-      const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd");
-      const data = await res.json();
-      const price = data.solana.usd.toFixed(2);
-      document.getElementById("solana-ticker").innerText = `🔺 Solana (SOL) Price: $${price} USD`;
-    } catch (e) {
-      document.getElementById("solana-ticker").innerText = "Failed to load SOL price";
-    }
-  }
-  updateSolanaPrice();
-  setInterval(updateSolanaPrice, 60000); // update every 60 seconds
-</script>
-
-  
-
-  <a class="button" href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">
-    🧀 Buy $WGM on Pump.fun
-  </a>
-  <a class="button" href="https://dexscreener.com/solana/dhfjzuaunulez8uskyhavpweu2cobh5tj8bm8gzkwupx" target="_blank">
-    📈 View on DEXScreener
-  </a>
+    Loading SOL price...
+  </div>
 
   <div class="main-layout">
-    <aside class="left-section">
+    <aside class="left-section section-animate">
       <div class="award-ad">
-        <span class="trophy">🏆</span>
-        <div class="title">WGM Crypto Award</div>
-        <div class="desc"><strong>$WAGMICE</strong> is the <span class="highlight">Cheesiest Crypto of the Year!</span><br>
+        <span class="trophy" style="font-size:2.5rem;">🏆</span>
+        <div class="title" style="font-size:1.5rem;font-weight:bold;margin-bottom:0.5rem;">WGM Crypto Award</div>
+        <div class="desc"><strong>$WAGMICE</strong> is the <span class="highlight" style="color:#fff;background:#ff8f00;padding:0.3em 0.8em;border-radius:10px;font-weight:bold;">Cheesiest Crypto of the Year!</span><br>
         Play, Meme, and Win Big!</div>
       </div>
-      <h2>Play Our Games!</h2>
-      <button class="flashy-cheese-btn" onclick="window.open('cheese-clicker.html', '_blank')">
-        🧀 Play Cheese Clicker!
-      </button>
-      <button class="flashy-cheese-btn" onclick="window.open('CheeseShooter.html', '_blank')">
-        🔫 Play Cheese Shooter 2!
-      </button>
+      <h2 style="text-align:center;margin-bottom:1.5rem;">Play Our Games!</h2>
+      <button class="button" onclick="window.open('cheese-clicker.html', '_blank')">🧀 Play Cheese Clicker!</button>
+      <button class="button" onclick="window.open('CheeseShooter.html', '_blank')">🔫 Play Cheese Shooter 2!</button>
     </aside>
 
-    <section class="main-content">
-      <h1>$WAGMICE 🧀</h1>
-      <h2>Solana’s Cheesiest Meme Token</h2>
+    <section class="main-content section-animate">
+      <h1 style="color:#c77700;text-shadow:1px 1px 2px rgba(255,240,200,0.7);">$WAGMICE 🧀</h1>
+      <h2 style="color:#c77700;text-shadow:1px 1px 2px rgba(255,240,200,0.7);">Solana’s Cheesiest Meme Token</h2>
       <img src="wagmice-logo.png" alt="WAGMICE logo" />
-      <div class="meme-text">
-        "In Cheese We Trust. In Rugs We Bust."
-      </div>
+      <div class="meme-text">"In Cheese We Trust. In Rugs We Bust."</div>
       <p>
         $WAGMICE is a fair-launched meme coin on <strong>Pump.fun</strong><br>
         🧀 1 Billion Supply — No VC — No Presale<br>
         🐭 Powered by rats. Pumped by degenerates.
       </p>
-
-      <a class="button" href="https://dexscreener.com/solana/dhfjzuaunulez8uskyhavpweu2cobh5tj8bm8gzkwupx" target="_blank" style="background-color: #2980b9; color: #fff;">
-        📊 View Chart on DEXScreener
-      </a>
-      <a class="button" href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank" style="margin-top: 10px;">
-        Buy $WGM Now 🚀
-      </a>
-
-      <div class="links">
-        <p>Follow us on <a href="https://x.com/prithviraj987" target="_blank">X (Twitter)</a></p>
-        <p>View on <a href="https://solscan.io/token/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4" target="_blank">Solscan</a></p>
-      </div>
-    </section>
-    <div class="sidebar">
-      <p>🌐 <strong>Main Site:</strong> <a href="https://pb59.github.io/WagmiceToken/" target="_blank">pb59.github.io/WagmiceToken</a></p>
-      <p>📈 <strong>Token Explorer (Solscan):</strong> <a href="https://solscan.io/token/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">View on Solscan</a></p>
-      <p>💰 <strong>Buy on Pump.fun:</strong> <a href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">Buy WAGMICE</a></p>
-      <p>💹 <strong>Swap on Raydium:</strong> <a href="https://raydium.io/swap/?inputMint=sol&outputMint=4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">Trade on Raydium</a></p>
-      <p>🎮 <strong>Play the Game:</strong> <a href="https://pb59.github.io/WagmiceToken/cheese-clicker.html" target="_blank">Cheese Clicker</a></p>
-      <p>🐦 <strong>Follow us on X:</strong> <a href="https://x.com/wagmice" target="_blank">@wagmice</a></p>
-    </div>
-    
-  </div>
-  
-  <section id="community">
-    <h2>📢 Join the WAGMICE Army</h2>
-    <p>Chat. Meme. Moon. Connect with fellow $WGM believers on Telegram!</p>
-    <a href="https://t.me/wagmice" target="_blank">
-      🚀 Join Us on Telegram (Original)
-    </a>
-    <a href="https://t.me/WAGMICE" target="_blank">
-      🌐 Join Public Telegram Community
-    </a>
-    <a href="https://t.me/WAGMICEpvt" target="_blank">
-      🔒 Join Private Telegram Group
-    </a>
-    <p class="contact-email">
-      📧 Contact Us: <a href="mailto:wagmice555@gamil.com">wagmice555@gamil.com</a>
-    </p>
-  </section>
-
-</body>
-</html>
+      <a class="button" href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">🧀 Buy $WGM on Pump.fun</a>
+      <a class="button" href="https://dexscreener.com/solana/dhfjzuaunulez8uskyhavpweu2cobh5tj8bm8gzkwupx" target="_blank">📈 View on DEXScre*
+
