@@ -285,6 +285,25 @@
 <p>🎮 <strong>Play the Game:</strong> <a href="https://pb59.github.io/WagmiceToken/cheese-clicker.html" target="_blank">Cheese Clicker</a></p>
 <p>🐦 <strong>Follow us on X:</strong> <a href="https://x.com/wagmice" target="_blank">@wagmice</a></p>
 
+  <div id="solana-ticker" style="background:#111; color:#00ffa3; padding:10px; text-align:center; font-family:monospace;">
+  Loading SOL price...
+</div>
+
+<script>
+  async function updateSolanaPrice() {
+    try {
+      const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd");
+      const data = await res.json();
+      const price = data.solana.usd.toFixed(2);
+      document.getElementById("solana-ticker").innerText = `🔺 Solana (SOL) Price: $${price} USD`;
+    } catch (e) {
+      document.getElementById("solana-ticker").innerText = "Failed to load SOL price";
+    }
+  }
+  updateSolanaPrice();
+  setInterval(updateSolanaPrice, 60000); // update every 60 seconds
+</script>
+
   
 
   <a class="button" href="https://pump.fun/coin/4KJkZRraHqGH7WX2oih3LnYnVjp6zP667otMahq4pump" target="_blank">
