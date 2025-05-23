@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WAGMICE Mario-Style Game</title>
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #222;
+      display: flex; /* Added for centering canvas */
+      justify-content: center; /* Added for centering canvas */
+      align-items: center; /* Added for centering canvas */
+      min-height: 100vh; /* Ensure body takes full viewport height */
+    }
+    canvas {
+      display: block;
+      /* margin: 0 auto; -- Handled by flexbox now */
+    }
+  </style>
+</head>
+<body>
+<script>
+// Removed global 'let score = 0;'
+
+class StartScene extends Phaser.Scene {
+  constructor() {
+    super({ key: 'StartScene' });
+  }
+
+  preload() {
+    this.load.image('startBackground', 'https://labs.phaser.io/assets/skies/space3.png'); // Renamed key for clarity
+    this.load.image('playButton', 'https://cdn-icons-png.flaticon.com/512/32/32355.png');
+  }
+
+  create() {
+    this.add.image(400, 300, 'startBackground'); // Use the new key
+    const btn = this.add.image(400, 450, 'playButton').setScale(0.1).setInteractive(); // Adjusted Y position slightly
+    btn.on('pointerdown', () => this.scene.start('GameScene'));
+    this.add.text(250, 200, 'WAGMICE CHEESE RUN', { fontSize: '32px', fill: '#fff', fontStyle: 'bold' });
+  }
+}
+
+class GameScene extends Phaser.Scene {
+  constructor() {
+    super({ key: 'GameScene' });
+    this.score = 0; // Initialize score as a scene property
+    this.levelCompleteShown = false; // Initialize flag here
+  }
+
+  preload() {
+    this.load.image('sky', 'https://labs.phaser.io/assets/skies/space3.png');
+    this.load.image('ground', 'https://labs.phaser.io/assets/sprites/platform.png');
+    this.load.image('cheese', 'https://cdn-icons-png.flaticon.com/512/135/135695.png');
+    this.load.image('wgmToken', 'https://cryptologos.cc/logos/solana-sol-logo.png');
+    this.load.spritesheet('mouse', 'https://labs.phaser.io/assets/sprites/dude.png', {
+      frameWidth: 32,
+      frameHeight: 48
+    });
+    this.load.audio('collectSound', 'https://labs.phaser.io/assets/audio/SoundEffects/pickup.wav'); // Renamed for clarity
+    this.load.audio('jumpSound', 'https://labs.phaser.io/assets/audio/SoundEffects/jump.mp3'); // Renamed for clarity
+    this.load.audio('endSound', 'https://labs.phaser.io/assets/audio/SoundEffects/alien_death1.wav'); // Renamed for clarity
+  }
+
+  create() {
+    // Reset score and flag at the beginning of the game (or on restart)
+    this.score = 0;
+    this.levelCompleteShown = false;
+
+    this.add.image(400, 300, 'sky');
+
+    // Add sounds
+    this.collectSfx = this.sound.add('collectSound'); // Use renamed keys
+    this.jumpSfx = this.sound.add('jumpSound');
+    this.endSfx = this.sound.add('endSound');
+
+    // Create platforms
+    const platforms = this.physics.add.staticGroup();
+    platforms.create(400, 568, 'ground').setScale(2).refreshBody(); // Main ground
+    platforms.create(600, 400, 'ground'); // First platform
+    platforms.create(50, 250, 'ground');   // Second platform
+    platforms.create(750, 220, 'ground'); // Third platform (highest)
+
+    // Create player
+    this.player = this.physics.add.sprite(100, 450, 'mouse');
+    this.player.setBounce(0.2);
+    this.player.setCollideWorldBounds(true);
+    // Player's gravity will be set by the world gravity in config
+
+    // Player animations
+    this.anims.create({ key: 'left', frames: this.anims.generateFrameNumbers('mouse', { start: 0, end: 3 }), frameRate: 10, repeat: -1 });
+    this.anims.create({ key: 'turn', frames: [ { key: 'mouse', frame: 4 } ], frameRate: 20 });
+    this.anims.create({ key: 'right', frames: this.anims.generateFrameNumbers('mouse', { start: 5, end: 8 }), frameRate: 10, repeat: -1 });
+
+    // Input cursors
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    // Create cheese collectibles
+    this.cheeseGroup = this.physics.add.group({ // Renamed for clarity
+      key: 'cheese',
+      repeat: 7, // Total 8 cheese items
+      setXY: { x: 50, y: 0, stepX: 100 }
+    });
+    this.cheeseGroup.children.iterate(child => {
+      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+      child.setScale(0.05); // Scale down the cheese image
+    });
+
+    // Create token collectibles
+    this.tokenGroup = this.physics.add.group({ // Renamed for clarity
+      key: 'wgmToken',
+      repeat: 2, // Total 3 tokens
+      setXY: { x: 150, y: 0, stepX: 300 }
+    });
+    this.tokenGroup.children.iterate(child => {
+      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+      child.setScale(0.05); // Scale down the token image
+    });
+
+    // Score text
+    this.scoreText = this.add.text(16, 16, 'Cheese: 0', { fontSize: '32px', fill: '#ffffff', fontStyle: 'bold' });
+
+    // Colliders
+    this.physics.add.collider(this.player, platforms);
+    this.physics.add.collider(this.cheeseGroup, platforms);
+    this.physics.add.collider(this.tokenGroup, platforms);
+
+    // Overlaps for collecting items
+    this.physics.add.overlap(this.player, this.cheeseGroup, this.collectCheese, null, this);
+    this.physics.add.overlap(this.player, this.tokenGroup, this.collectToken, null, this);
+  }
+
+  update() {
+    // Player movement
+    if (this.cursors.left.isDown) {
+      this.player.setVelocityX(-160); // Horizontal speed
+      this.player.anims.play('left', true);
+    } else if (this.cursors.right.isDown) {
+      this.player.setVelocityX(160);
+      this.player.anims.play('right', true);
+    } else {
+      this.player.setVelocityX(0);
+      this.player.anims.play('turn');
+    }
+
+    // Player jump
+    // The jump velocity (-330) combined with adjusted gravity (300) should provide a decent jump height.
+    // You can tweak this value for a higher/lower jump:
+    // e.g., -350 for a slightly higher jump, -300 for a lower jump.
+    if (this.cursors.up.isDown && this.player.body.touching.down) {
+      this.player.setVelocityY(-330); // Jump velocity
+      this.jumpSfx.play();
+    }
+
+    // Check for level completion
+    if (!this.levelCompleteShown && this.cheeseGroup.countActive(true) === 0 && this.tokenGroup.countActive(true) === 0) {
+      this.levelCompleteShown = true;
+      this.endSfx.play();
+      // Pass the score to the EndScene
+      this.scene.start('EndScene', { finalScore: this.score });
+    }
+  }
+
+  collectCheese(player, cheeseItem) {
+    cheeseItem.disableBody(true, true); // Deactivate and hide the cheese
+    this.score += 10; // Update scene's score
+    this.scoreText.setText('Cheese: ' + this.score);
+    this.collectSfx.play();
+  }
+
+  collectToken(player, tokenItem) {
+    tokenItem.disableBody(true, true); // Deactivate and hide the token
+    this.score += 20; // Update scene's score
+    this.scoreText.setText('Cheese: ' + this.score);
+    this.collectSfx.play();
+
+    // Fun little tween effect on player when collecting a token
+    this.tweens.add({
+      targets: player,
+      scale: 1.2, // Slightly reduced scale factor for subtlety
+      duration: 150, // Shorter duration
+      yoyo: true,
+      ease: 'Power1'
+    });
+  }
+}
+
+class EndScene extends Phaser.Scene {
+  constructor() {
+    super({ key: 'EndScene' });
+  }
+
+  // The 'data' parameter will receive any data passed from the previous scene
+  create(data) {
+    this.add.image(400, 300, 'sky').setAlpha(0.7); // Use sky from GameScene, slightly transparent
+
+    // Access the score passed from GameScene
+    const finalScore = data.finalScore || 0; // Default to 0 if score isn't passed
+
+    this.add.text(this.cameras.main.centerX, 250, `Level Complete!`, { fontSize: '48px', fill: '#fff', fontStyle: 'bold' }).setOrigin(0.5);
+    this.add.text(this.cameras.main.centerX, 310, `Total Cheese: ${finalScore}`, { fontSize: '32px', fill: '#ffff00' }).setOrigin(0.5);
+
+    const restartText = this.add.text(this.cameras.main.centerX, 400, 'Click to Restart', { fontSize: '28px', fill: '#0f0', fontStyle: 'bold' })
+      .setOrigin(0.5)
+      .setInteractive()
+      .setPadding(10);
+
+    // Visual feedback for button interaction (optional, but nice)
+    restartText.on('pointerover', () => restartText.setFill('#ff0'));
+    restartText.on('pointerout', () => restartText.setFill('#0f0'));
+
+    restartText.on('pointerdown', () => {
+      this.scene.start('GameScene');
+    });
+  }
+}
+
+const config = {
+  type: Phaser.AUTO, // Phaser will try WebGL first, then Canvas
+  width: 800,
+  height: 600,
+  physics: {
+    default: 'arcade',
+    arcade: {
+      // Adjusted gravity for better playability.
+      // Original was 1000, which made jumps very short.
+      // With a jump velocity of -330, a gravity of 300 allows for a jump height of ~181 pixels.
+      // Feel free to tune this value and the player's jump velocity in GameScene.update()
+      // to get the game feel you prefer.
+      gravity: { y: 300 },
+      debug: false // Set to true to see physics bodies and vectors (helpful for debugging)
+    }
+  },
+  scene: [StartScene, GameScene, EndScene]
+};
+
+// Create the game instance
+const game = new Phaser.Game(config); // 'game' variable is local to this script block
+</script>
+</body>
+</html>
