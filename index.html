@@ -18,15 +18,55 @@
   <meta name="twitter:image" content="https://pb59.github.io/WagmiceToken/wagmice-logo.png">
 
   <style>
-    body {
-      background-color: #f8f0e3; /* Lighter, slightly creamy cheese-themed background */
-      color: #4a3f35; /* Darker brown text for contrast */
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      text-align: center;
-      padding: 2rem;
-      margin: 0;
-      line-height: 1.6;
-    }
+body {
+  background: linear-gradient(120deg, #fff3c5 0%, #fcd77f 100%);
+  color: #4a3f35;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  text-align: center;
+  padding: 2rem;
+  margin: 0;
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Animated cheese blobs */
+.cheese-bg {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.cheese-blob {
+  position: absolute;
+  border-radius: 40% 60% 70% 30%/60% 40% 60% 40%;
+  background: #ffe066;
+  opacity: 0.7;
+  animation: floatCheese 12s infinite linear;
+  filter: blur(1px) brightness(1.05) drop-shadow(0 0 18px #fff9c7);
+}
+.cheese-blob:nth-child(1) {
+  width: 220px; height: 180px; left: 8vw; top: 15vh; animation-delay: 0s;
+}
+.cheese-blob:nth-child(2) {
+  width: 140px; height: 120px; right: 12vw; top: 35vh; animation-delay: 3s;
+}
+.cheese-blob:nth-child(3) {
+  width: 170px; height: 140px; left: 50vw; top: 70vh; animation-delay: 7s;
+}
+.cheese-blob:nth-child(4) {
+  width: 100px; height: 80px; left: 65vw; top: 10vh; animation-delay: 2s;
+}
+.cheese-blob:nth-child(5) {
+  width: 120px; height: 100px; right: 25vw; top: 65vh; animation-delay: 5s;
+}
+
+@keyframes floatCheese {
+  0% { transform: translateY(0) scale(1) rotate(0deg);}
+  50% { transform: translateY(-40px) scale(1.08) rotate(8deg);}
+  100% { transform: translateY(0) scale(1) rotate(0deg);}
+}
     img, .gif {
       max-width: 300px; /* Slightly reduced max-width for better proportion */
       margin: 1.5rem auto;
@@ -277,6 +317,13 @@
   </style>
 </head>
 <body>
+  <div class="cheese-bg">
+  <div class="cheese-blob"></div>
+  <div class="cheese-blob"></div>
+  <div class="cheese-blob"></div>
+  <div class="cheese-blob"></div>
+  <div class="cheese-blob"></div>
+</div>
   <div id="solana-ticker" style="background:#111; color:#00ffa3; padding:10px; text-align:center; font-family:monospace;">
   Loading SOL price...
 </div>
